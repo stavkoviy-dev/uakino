@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MultFan UA — Онлайн кінотеатр мультфільмів українською</title>
+    <title>MultFan UA — ТОБІ БУДЕ ВЕСЕЛО!</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -14,28 +14,33 @@
                     colors: {
                         darkBg: '#0b0f19',
                         cardBg: '#131b2e',
-                        accentRed: '#e50914',
-                        accentHover: '#b20710',
+                        neonGreen: '#00ff66',
+                        neonPink: '#ff007f',
+                        neonYellow: '#ffcc00',
                     }
                 }
             }
-        </script>
+        }
     </script>
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@800;900&display=swap');
+        .font-impact { font-family: 'Montserrat', sans-serif; }
+    </style>
 </head>
-<body class="bg-darkBg text-gray-100 min-h-screen flex flex-col font-sans">
+<body class="bg-darkBg text-gray-100 min-h-screen flex flex-col font-sans selection:bg-neonPink selection:text-white">
 
     <!-- Шапка сайту -->
-    <header class="bg-cardBg border-b border-gray-800 sticky top-0 z-50 shadow-md">
+    <header class="bg-cardBg/90 backdrop-blur border-b border-gray-800 sticky top-0 z-50 shadow-lg">
         <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
-            <a href="#" class="text-2xl font-black tracking-wider text-white flex items-center gap-2">
-                <i class="fa-solid fa-clapperboard text-accentRed"></i>Mult<span class="text-accentRed">Fan</span> UA
+            <a href="#" class="text-2xl font-impact tracking-wider text-white flex items-center gap-2">
+                <span class="text-neonGreen">Mult</span><span class="text-neonPink">Fan</span> <span class="text-neonYellow">UA</span>
             </a>
             
             <div class="flex items-center gap-4">
-                <div class="relative hidden sm:block">
-                    <input type="text" id="searchInput" placeholder="Пошук мультфільмів..." onkeyup="filterMovies()" class="bg-darkBg border border-gray-700 rounded-full px-4 py-1.5 text-sm text-white focus:outline-none focus:border-accentRed w-64">
+                <div class="relative">
+                    <input type="text" id="searchInput" placeholder="Шукати суєту..." onkeyup="filterMovies()" class="bg-darkBg border border-gray-700 rounded-full px-4 py-1.5 text-sm text-white focus:outline-none focus:border-neonGreen w-48 sm:w-64">
                     <i class="fa-solid fa-search absolute right-3 top-2.5 text-gray-400 text-sm"></i>
                 </div>
             </div>
@@ -45,26 +50,32 @@
     <!-- Головний вміст -->
     <main class="max-w-7xl mx-auto px-4 py-6 flex-1 w-full">
         
-        <!-- Категорії -->
-        <div class="flex items-center gap-2 overflow-x-auto pb-4 mb-6 no-scrollbar">
-            <button onclick="filterCategory('all')" class="px-4 py-1.5 bg-accentRed text-white rounded-full text-sm font-medium whitespace-nowrap transition">Усі</button>
-            <button onclick="filterCategory('multfilm')" class="px-4 py-1.5 bg-cardBg hover:bg-gray-800 text-gray-300 rounded-full text-sm font-medium whitespace-nowrap transition border border-gray-700">Мультфільми</button>
-            <button onclick="filterCategory('series')" class="px-4 py-1.5 bg-cardBg hover:bg-gray-800 text-gray-300 rounded-full text-sm font-medium whitespace-nowrap transition border border-gray-700">Мультсеріали</button>
-            <button onclick="filterCategory('anime')" class="px-4 py-1.5 bg-cardBg hover:bg-gray-800 text-gray-300 rounded-full text-sm font-medium whitespace-nowrap transition border border-gray-700">Аніме</button>
+        <!-- Баннер / Трендовий заголовок -->
+        <div class="mb-8 p-6 rounded-2xl bg-gradient-to-r from-purple-900/40 via-pink-900/30 to-green-900/40 border border-gray-800 flex flex-col md:flex-row items-center justify-between gap-4">
+            <div>
+                <span class="bg-neonPink text-black text-xs font-black px-2.5 py-1 rounded-full uppercase">TRENDING CHAOS</span>
+                <h1 class="text-3xl sm:text-4xl font-impact font-black text-white mt-2">ДИВИСЬ НАЙКРУТІШУ АНІМАЦІЮ</h1>
+                <p class="text-gray-400 text-sm mt-1">Тільки топові мультсеріали українською. Ніякої нудьги, чистий портал у вир емоцій!</p>
+            </div>
+            <div class="flex gap-2 flex-wrap">
+                <button onclick="filterCategory('all')" class="px-4 py-2 bg-neonGreen text-black font-bold rounded-xl text-sm hover:scale-105 transition">Усі твори</button>
+                <button onclick="filterCategory('series')" class="px-4 py-2 bg-cardBg border border-gray-700 hover:border-neonPink text-white font-bold rounded-xl text-sm transition">Серіали</button>
+                <button onclick="filterCategory('anime')" class="px-4 py-2 bg-cardBg border border-gray-700 hover:border-neonYellow text-white font-bold rounded-xl text-sm transition">Аніме суєта</button>
+            </div>
         </div>
 
-        <!-- Сітка карток фільмів -->
-        <div id="moviesGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 sm:gap-6">
-            <!-- Сюди автоматично завантажуються фільми з JavaScript -->
+        <!-- Сітка карток -->
+        <div id="moviesGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
+            <!-- Динамічно заповнюється скриптом -->
         </div>
     </main>
 
-    <!-- Модальне вікно перегляду / плеєра -->
-    <div id="playerModal" class="fixed inset-0 bg-black/80 hidden z-50 flex items-center justify-center p-4">
-        <div class="bg-cardBg w-full max-w-4xl rounded-xl overflow-hidden border border-gray-800 shadow-2xl relative flex flex-col max-h-[90vh]">
+    <!-- Модальне вікно плеєра -->
+    <div id="playerModal" class="fixed inset-0 bg-black/85 hidden z-50 flex items-center justify-center p-4 backdrop-blur-sm">
+        <div class="bg-cardBg w-full max-w-4xl rounded-2xl overflow-hidden border border-gray-800 shadow-2xl relative flex flex-col max-h-[90vh]">
             <div class="flex items-center justify-between px-4 py-3 border-b border-gray-800">
-                <h3 id="modalTitle" class="font-bold text-lg text-white">Назва мультфільму</h3>
-                <button onclick="closeModal()" class="text-gray-400 hover:text-white text-xl p-1"><i class="fa-solid fa-xmark"></i></button>
+                <h3 id="modalTitle" class="font-bold text-lg text-white font-impact">Назва</h3>
+                <button onclick="closeModal()" class="text-gray-400 hover:text-neonPink text-xl p-1"><i class="fa-solid fa-xmark"></i></button>
             </div>
             <div class="relative w-full aspect-video bg-black">
                 <iframe id="modalIframe" class="w-full h-full" src="" frameborder="0" allowfullscreen></iframe>
@@ -77,42 +88,91 @@
 
     <!-- Футер -->
     <footer class="bg-cardBg border-t border-gray-800 text-center py-6 text-gray-400 text-sm mt-12">
-        <p>MultFan UA — Усі права захищено. Дивіться українською.</p>
+        <p>MultFan UA — Тобі буде весело! 👽🔥</p>
     </footer>
 
-    <!-- Скрипт з базою даних та логікою -->
+    <!-- Скрипт бази даних -->
     <script>
-        // База даних ваших мультфільмів та фільмів
         const movies = [
             {
                 id: 1,
-                title: "Памфір",
-                category: "multfilm", // тут може бути художній фільм або драма
-                year: "2022",
-                rating: "7.4",
-                poster: "https://full4k.kinoklass.net/uploads/posts/2023-06/pamfir-2022.webp",
-                trailer: "https://www.youtube.com/embed/bRqmFp7ZdC8",
-                description: "Памфир — в прошлом контрабандист, ныне зарабатывающий строительными работами. Он вернулся с заработков в родное село накануне зимних праздников..."
+                title: "Рік та Морті",
+                category: "series",
+                year: "2013-2026",
+                rating: "9.0",
+                poster: "https://image.tmdb.org/t/p/w500/cvhNj9eoRBe5SxjCbQTkh05UP5N.jpg",
+                trailer: "https://www.youtube.com/embed/xE0Krr2gE0g",
+                description: "Божевільний вчений-алкоголік Рік та його онук Морті подорожують паралельними вимірами, творячи повний хаос."
             },
             {
                 id: 2,
-                title: "Мавка: Лісова пісня",
-                category: "multfilm",
-                year: "2023",
-                rating: "8.1",
-                poster: "https://image.tmdb.org/t/p/w500/eeJc7aU9PMMUSKCBb99xQW5R0q1.jpg",
-                trailer: "https://www.youtube.com/embed/1W9b6h4s0c8",
-                description: "Мавка — Душа Лісу і його майбутня Охоронець — стикається з неможливим вибором між коханням і обов'язком перед лісом..."
+                title: "Ґравіті Фолз",
+                category: "series",
+                year: "2012-2016",
+                rating: "8.9",
+                poster: "https://image.tmdb.org/t/p/w500/1o6iMifkkgQZ98Z8Hq6t1851ZpU.jpg",
+                trailer: "https://www.youtube.com/embed/X7wzW3vT1q8",
+                description: "Близнюки Діппер і Мейбл Пайнс приїжджають на канікули до свого дядька у дивне містечко Ґравіті Фолз."
             },
             {
                 id: 3,
-                title: "Людина-Павук: Крізь всесвіт",
-                category: "multfilm",
-                year: "2023",
+                title: "Час Пригод",
+                category: "series",
+                year: "2010-2018",
+                rating: "8.8",
+                poster: "https://image.tmdb.org/t/p/w500/qkGOjau7Z5c8u2m1180N5s86mYx.jpg",
+                trailer: "https://www.youtube.com/embed/uakXqXfK_uY",
+                description: "Неймовірні пригоди хлопчика Фінна та його магічного пса Джейка у постапокаліптичній Землі Ууу."
+            },
+            {
+                id: 4,
+                title: "Кінь БоДжек",
+                category: "series",
+                year: "2014-2020",
                 rating: "8.7",
-                poster: "https://image.tmdb.org/t/p/w500/8Vt6mWEReuy4Of61Lnj5Xj704m8.jpg",
-                trailer: "https://www.youtube.com/embed/cqGjhVJWtEg",
-                description: "Майлз Моралес вирушає у пригоду мультивсесвітом разом із Гвен Стейсі..."
+                poster: "https://image.tmdb.org/t/p/w500/pThekymwuyw7W40qGvN7T9M21j0.jpg",
+                trailer: "https://www.youtube.com/embed/i_R4gVqV3A0",
+                description: "Кінь-актор колишньої зірки ситкому намагається розібратися зі своїм життям, депресією та славою в Голлівуді."
+            },
+            {
+                id: 5,
+                title: "Південний Парк",
+                category: "series",
+                year: "1997-2026",
+                rating: "8.7",
+                poster: "https://image.tmdb.org/t/p/w500/vGbu7AN8uO1T3n7Nq43O6bE492x.jpg",
+                trailer: "https://www.youtube.com/embed/4W14_u39fR0",
+                description: "Четверо друзів живуть у маленькому містечку і постійно потрапляють у найабсурдніші ситуації."
+            },
+            {
+                id: 6,
+                title: "Сімпсони",
+                category: "series",
+                year: "1989-2026",
+                rating: "8.6",
+                poster: "https://image.tmdb.org/t/p/w500/kB9r5VbbDDH8rV8N8sM7a4B75.jpg",
+                trailer: "https://www.youtube.com/embed/HRiQPq_Kj1I",
+                description: "Легендарна сім'я Сімпсонів та їхнє життя в містечку Спрінгфілд."
+            },
+            {
+                id: 7,
+                title: "Футурама",
+                category: "series",
+                year: "1999-2023",
+                rating: "8.5",
+                poster: "https://image.tmdb.org/t/p/w500/bJ83wzV3w0v8a5M1z2Z2yWz6Q6.jpg",
+                trailer: "https://www.youtube.com/embed/2Qc9y8X2c_o",
+                description: "Доставник піци випадково заморожується у криокапсулі і прокидається через 1000 років у майбутньому."
+            },
+            {
+                id: 8,
+                title: "Любов, смерть і роботи",
+                category: "anime",
+                year: "2019-2022",
+                rating: "8.4",
+                poster: "https://image.tmdb.org/t/p/w500/c77O5hGZ62K2fJ6oP4uY4mZq9X.jpg",
+                trailer: "https://www.youtube.com/embed/wUFwAc3Z1tw",
+                description: "Антологія науково-фантастичних короткометражних анімаційних історій для дорослих."
             }
         ];
 
@@ -122,28 +182,27 @@
         const modalTitle = document.getElementById('modalTitle');
         const modalDesc = document.getElementById('modalDesc');
 
-        // Функція виведення карток на екран
-        function displayMovies(moviesToDisplay) {
+        function displayMovies(items) {
             moviesGrid.innerHTML = '';
-            if (moviesToDisplay.length === 0) {
-                moviesGrid.innerHTML = `<p class="col-span-full text-center text-gray-400 py-10">Нічого не знайдено</p>`;
+            if (items.length === 0) {
+                moviesGrid.innerHTML = `<p class="col-span-full text-center text-gray-400 py-10">Нічого не знайдено, бро 😕</p>`;
                 return;
             }
             
-            moviesToDisplay.forEach(movie => {
+            items.forEach(movie => {
                 const card = document.createElement('div');
-                card.className = "bg-cardBg rounded-xl overflow-hidden shadow-lg hover:scale-105 transition duration-300 flex flex-col cursor-pointer border border-gray-800";
+                card.className = "bg-cardBg rounded-2xl overflow-hidden shadow-xl hover:scale-105 transition duration-300 flex flex-col cursor-pointer border border-gray-800 hover:border-neonGreen group";
                 card.onclick = () => openModal(movie);
                 
                 card.innerHTML = `
                     <div class="relative aspect-[2/3] overflow-hidden bg-gray-900">
-                        <img src="${movie.poster}" alt="${movie.title}" class="w-full h-full object-cover">
-                        <span class="absolute top-2 right-2 bg-black/70 backdrop-blur-md text-yellow-400 text-xs px-2 py-1 rounded font-bold">
+                        <img src="${movie.poster}" alt="${movie.title}" class="w-full h-full object-cover group-hover:opacity-90 transition">
+                        <span class="absolute top-2 right-2 bg-black/80 backdrop-blur-md text-neonYellow text-xs px-2 py-1 rounded-lg font-black border border-yellow-500/30">
                             <i class="fa-solid fa-star"></i> ${movie.rating}
                         </span>
                     </div>
                     <div class="p-3 flex flex-col flex-1 justify-between">
-                        <h4 class="font-bold text-sm text-white line-clamp-1">${movie.title}</h4>
+                        <h4 class="font-bold text-sm text-white line-clamp-1 group-hover:text-neonGreen transition">${movie.title}</h4>
                         <span class="text-xs text-gray-400 mt-1">${movie.year}</span>
                     </div>
                 `;
@@ -151,7 +210,6 @@
             });
         }
 
-        // Відкрити плеєр
         function openModal(movie) {
             modalTitle.textContent = movie.title;
             modalDesc.textContent = movie.description;
@@ -159,30 +217,24 @@
             modal.classList.remove('hidden');
         }
 
-        // Закрити плеєр
         function closeModal() {
             modal.classList.add('hidden');
             modalIframe.src = '';
         }
 
-        // Фільтрація за категоріями
         function filterCategory(category) {
             if (category === 'all') {
                 displayMovies(movies);
             } else {
-                const filtered = movies.filter(m => m.category === category);
-                displayMovies(filtered);
+                displayMovies(movies.filter(m => m.category === category));
             }
         }
 
-        // Пошук за назвою
         function filterMovies() {
             const query = document.getElementById('searchInput').value.toLowerCase();
-            const filtered = movies.filter(m => m.title.toLowerCase().includes(query));
-            displayMovies(filtered);
+            displayMovies(movies.filter(m => m.title.toLowerCase().includes(query)));
         }
 
-        // Запуск при завантаженні
         displayMovies(movies);
     </script>
 </body>
