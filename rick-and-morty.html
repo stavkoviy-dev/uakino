@@ -95,21 +95,11 @@
                     </video>
                 </div>
 
-                <!-- Вибір серії (Кнопки знизу) -->
+                <!-- Вибір серії (Кнопки знизу, генеруються динамічно залежно від сезону) -->
                 <div class="bg-cardBg p-4 rounded-2xl border border-gray-800">
                     <h3 class="text-sm font-bold text-gray-300 mb-3"><i class="fa-solid fa-play text-neonPink"></i> Оберіть серію (<span id="currentSeasonLabel">Сезон 1</span>):</h3>
-                    <div class="flex gap-2 flex-wrap">
-                        <button onclick="selectEpisode(1)" id="epBtn1" class="px-4 py-2 bg-neonPink text-white font-bold rounded-xl text-sm transition">Серія 1</button>
-                        <button onclick="selectEpisode(2)" id="epBtn2" class="px-4 py-2 bg-darkBg border border-gray-700 text-white font-bold rounded-xl text-sm transition hover:border-neonPink">Серія 2</button>
-                        <button onclick="selectEpisode(3)" id="epBtn3" class="px-4 py-2 bg-darkBg border border-gray-700 text-white font-bold rounded-xl text-sm transition hover:border-neonPink">Серія 3</button>
-                        <button onclick="selectEpisode(4)" id="epBtn4" class="px-4 py-2 bg-darkBg border border-gray-700 text-white font-bold rounded-xl text-sm transition hover:border-neonPink">Серія 4</button>
-                        <button onclick="selectEpisode(5)" id="epBtn5" class="px-4 py-2 bg-darkBg border border-gray-700 text-white font-bold rounded-xl text-sm transition hover:border-neonPink">Серія 5</button>
-                        <button onclick="selectEpisode(6)" id="epBtn6" class="px-4 py-2 bg-darkBg border border-gray-700 text-white font-bold rounded-xl text-sm transition hover:border-neonPink">Серія 6</button>
-                        <button onclick="selectEpisode(7)" id="epBtn7" class="px-4 py-2 bg-darkBg border border-gray-700 text-white font-bold rounded-xl text-sm transition hover:border-neonPink">Серія 7</button>
-                        <button onclick="selectEpisode(8)" id="epBtn8" class="px-4 py-2 bg-darkBg border border-gray-700 text-white font-bold rounded-xl text-sm transition hover:border-neonPink">Серія 8</button>
-                        <button onclick="selectEpisode(9)" id="epBtn9" class="px-4 py-2 bg-darkBg border border-gray-700 text-white font-bold rounded-xl text-sm transition hover:border-neonPink">Серія 9</button>
-                        <button onclick="selectEpisode(10)" id="epBtn10" class="px-4 py-2 bg-darkBg border border-gray-700 text-white font-bold rounded-xl text-sm transition hover:border-neonPink">Серія 10</button>
-                        <button onclick="selectEpisode(11)" id="epBtn11" class="px-4 py-2 bg-darkBg border border-gray-700 text-white font-bold rounded-xl text-sm transition hover:border-neonPink">Серія 11</button>
+                    <div class="flex gap-2 flex-wrap" id="episodesContainer">
+                        <!-- Кнопки серій з'являться тут автоматично через скрипт -->
                     </div>
                 </div>
             </div>
@@ -121,30 +111,31 @@
     </footer>
 
     <script>
-        // Поточний обраний сезон та серія за замовчуванням
         let currentSeason = 1;
         let currentEpisode = 1;
 
-        // База посилань на відео для кожного сезону та серії
-        // Сюди ти зможеш легко додавати посилання у форматі: [season][episode] = "посилання_на_.mp4"
+        // База посилань на відео (можеш додавати сюди посилання для будь-якої серії)
         const videoDatabase = {
             1: {
                 1: "https://prx.ukrtelcdn.net/s__emerald/651ceb8619e9134e1035078e2cb6d4b4:2026092717:OG1jbEhiV1lGNWZNamNGekFBdzZKS2tNS1c0am5LZUdlQjYyRUVOaFFHemQxMk5QUzFpK1drcWpPTTh6cm94VHpmVlRQQXBhNjU5d0E1Ym1RZXR3YkJMcnRiYnNwcit4UlAvWi9NZUxZc3J6WlB1YmZxd3JSMEhORytSZnZaeEM=/5/7/3/3/6/fspfk.mp4",
-                2: "ТУТ_ПОСИЛАННЯ_НА_СЕЗОН_1_СЕРІЯ_2.mp4",
-                3: "ТУТ_ПОСИЛАННЯ_НА_СЕЗОН_1_СЕРІЯ_3.mp4",
-                // і так далі до 11 серії...
+                // Решта серій 1-го сезону за замовчуванням матимуть це ж посилання, доки ти не заміниш їх своїми:
+                2: "", 3: "", 4: "", 5: "", 6: "", 7: "", 8: "", 9: "", 10: "", 11: ""
             },
-            2: {
-                1: "ТУТ_ПОСИЛАННЯ_НА_СЕЗОН_2_СЕРІЯ_1.mp4",
-                2: "ТУТ_ПОСИЛАННЯ_НА_СЕЗОН_2_СЕРІЯ_2.mp4",
-            },
-            // інші сезони...
+            // Сезони 2-9 мають по 10 серій
+            2: { 1: "", 2: "", 3: "", 4: "", 5: "", 6: "", 7: "", 8: "", 9: "", 10: "" },
+            3: { 1: "", 2: "", 3: "", 4: "", 5: "", 6: "", 7: "", 8: "", 9: "", 10: "" },
+            4: { 1: "", 2: "", 3: "", 4: "", 5: "", 6: "", 7: "", 8: "", 9: "", 10: "" },
+            5: { 1: "", 2: "", 3: "", 4: "", 5: "", 6: "", 7: "", 8: "", 9: "", 10: "" },
+            6: { 1: "", 2: "", 3: "", 4: "", 5: "", 6: "", 7: "", 8: "", 9: "", 10: "" },
+            7: { 1: "", 2: "", 3: "", 4: "", 5: "", 6: "", 7: "", 8: "", 9: "", 10: "" },
+            8: { 1: "", 2: "", 3: "", 4: "", 5: "", 6: "", 7: "", 8: "", 9: "", 10: "" },
+            9: { 1: "", 2: "", 3: "", 4: "", 5: "", 6: "", 7: "", 8: "", 9: "", 10: "" }
         };
 
         function selectSeason(seasonNum) {
             currentSeason = seasonNum;
             
-            // Оновлюємо підсвічування кнопок сезонів
+            // Підсвічування кнопок сезонів
             for (let i = 1; i <= 9; i++) {
                 const btn = document.getElementById(`seasonBtn${i}`);
                 if (i === seasonNum) {
@@ -156,37 +147,64 @@
 
             document.getElementById('currentSeasonLabel').innerText = `Сезон ${seasonNum}`;
             
-            // Автоматично перемикаємо на 1-шу серію обраного сезону
+            // Динамічно створюємо кнопки серій: для 1-го сезону — 11 серій, для інших — 10
+            renderEpisodes(seasonNum === 1 ? 11 : 10);
+            
+            // Автоматично обираємо 1-шу серію нового сезону
             selectEpisode(1);
+        }
+
+        function renderEpisodes(totalEpisodes) {
+            const container = document.getElementById('episodesContainer');
+            container.innerHTML = ''; // Очищаємо попередні кнопки
+
+            for (let i = 1; i <= totalEpisodes; i++) {
+                const btn = document.createElement('button');
+                btn.id = `epBtn${i}`;
+                btn.innerText = `Серія ${i}`;
+                btn.onclick = () => selectEpisode(i);
+                
+                // Стилі за замовчуванням для неактивних кнопок серій
+                btn.className = "px-4 py-2 bg-darkBg border border-gray-700 text-white font-bold rounded-xl text-sm transition hover:border-neonPink";
+                container.appendChild(btn);
+            }
         }
 
         function selectEpisode(epNum) {
             currentEpisode = epNum;
 
+            // Визначаємо загальну кількість серій поточного сезону
+            const maxEp = currentSeason === 1 ? 11 : 10;
+
             // Оновлюємо підсвічування кнопок серій
-            for (let i = 1; i <= 11; i++) {
+            for (let i = 1; i <= maxEp; i++) {
                 const btn = document.getElementById(`epBtn${i}`);
-                if (i === epNum) {
-                    btn.className = "px-4 py-2 bg-neonPink text-white font-bold rounded-xl text-sm transition";
-                } else {
-                    btn.className = "px-4 py-2 bg-darkBg border border-gray-700 text-white font-bold rounded-xl text-sm transition hover:border-neonPink";
+                if (btn) {
+                    if (i === epNum) {
+                        btn.className = "px-4 py-2 bg-neonPink text-white font-bold rounded-xl text-sm transition";
+                    } else {
+                        btn.className = "px-4 py-2 bg-darkBg border border-gray-700 text-white font-bold rounded-xl text-sm transition hover:border-neonPink";
+                    }
                 }
             }
 
             const player = document.getElementById('videoPlayer');
             const source = document.getElementById('videoSource');
 
-            // Перевіряємо, чи є посилання в нашій базі
-            if (videoDatabase[currentSeason] && videoDatabase[currentSeason][currentEpisode]) {
-                source.src = videoDatabase[currentSeason][currentEpisode];
+            // Перевіряємо посилання в базі, якщо воно є — підключаємо, якщо порожнє — беремо дефолтне
+            const link = videoDatabase[currentSeason] && videoDatabase[currentSeason][currentEpisode];
+            if (link && link.trim() !== "") {
+                source.src = link;
             } else {
-                // Якщо посилання ще не вставлене, залишаємо посилання на 1 серію або показуємо заглушку
                 source.src = "https://prx.ukrtelcdn.net/s__emerald/651ceb8619e9134e1035078e2cb6d4b4:2026092717:OG1jbEhiV1lGNWZNamNGekFBdzZKS2tNS1c0am5LZUdlQjYyRUVOaFFHemQxMk5QUzFpK1drcWpPTTh6cm94VHpmVlRQQXBhNjU5d0E1Ym1RZXR3YkJMcnRiYnNwcit4UlAvWi9NZUxZc3J6WlB1YmZxd3JSMEhORytSZnZaeEM=/5/7/3/3/6/fspfk.mp4";
             }
 
             player.load();
             player.play();
         }
+
+        // Запуск під час першого завантаження сторінки (генерує 11 серій для 1-го сезону)
+        renderEpisodes(11);
     </script>
 </body>
 </html>
