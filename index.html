@@ -1,0 +1,979 @@
+<!DOCTYPE html>
+<html lang="uk" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KinoUA — Сучасний онлайн кінотеатр українською</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        darkBg: '#0b0f19',
+                        cardBg: '#131b2e',
+                        accentRed: '#e50914',
+                        accentHover: '#b20710',
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0b0f19;
+            color: #f3f4f6;
+            overflow-x: hidden;
+        }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0b0f19;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #1f293d;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #374151;
+        }
+        .hero-gradient {
+            background: linear-gradient(0deg, #0b0f19 0%, rgba(11, 15, 25, 0.8) 50%, rgba(11, 15, 25, 0.3) 100%);
+        }
+        .movie-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .movie-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 20px 25px -5px rgba(229, 9, 20, 0.2), 0 10px 10px -5px rgba(229, 9, 20, 0.1);
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col selection:bg-accentRed selection:text-white">
+
+    <!-- Header / Navbar -->
+    <header class="sticky top-0 z-40 bg-darkBg/90 backdrop-blur-md border-b border-gray-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <div class="flex items-center space-x-8">
+                <a href="#" onclick="switchTab('home')" class="flex items-center space-x-2 group">
+                    <div class="w-10 h-10 rounded-xl bg-accentRed flex items-center justify-center text-white font-black text-xl shadow-lg shadow-accentRed/30 group-hover:scale-105 transition-transform">
+                        <i class="fa-solid fa-play"></i>
+                    </div>
+                    <span class="text-2xl font-black tracking-wider bg-gradient-to-r from-white via-gray-200 to-accentRed bg-clip-text text-transparent">KINO<span class="text-accentRed">UA</span></span>
+                </a>
+                <nav class="hidden md:flex space-x-1">
+                    <button onclick="switchTab('home')" id="nav-home" class="px-4 py-2 rounded-lg text-sm font-medium transition-colors text-white bg-gray-800/60">Головна</button>
+                    <button onclick="switchTab('catalog')" id="nav-catalog" class="px-4 py-2 rounded-lg text-sm font-medium transition-colors text-gray-400 hover:text-white hover:bg-gray-800/40">Каталог</button>
+                    <button onclick="switchTab('favorites')" id="nav-favorites" class="px-4 py-2 rounded-lg text-sm font-medium transition-colors text-gray-400 hover:text-white hover:bg-gray-800/40 flex items-center space-x-2">
+                        <span>Моє обране</span>
+                        <span id="fav-counter" class="bg-accentRed text-white text-xs px-2 py-0.5 rounded-full font-bold">0</span>
+                    </button>
+                </nav>
+            </div>
+            
+            <div class="flex items-center space-x-4">
+                <div class="relative hidden sm:block">
+                    <input type="text" id="global-search" oninput="handleGlobalSearch(this.value)" placeholder="Пошук фільмів..." class="bg-gray-900 border border-gray-800 rounded-full pl-10 pr-4 py-2 text-sm text-white focus:outline-none focus:border-accentRed w-48 lg:w-64 transition-all">
+                    <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3 text-gray-400 text-sm"></i>
+                </div>
+                <button onclick="openRandomMovie()" class="hidden sm:flex items-center space-x-2 bg-gradient-to-r from-gray-800 to-gray-900 hover:from-gray-700 hover:to-gray-800 border border-gray-700 px-4 py-2 rounded-xl text-sm font-medium transition-all shadow-md">
+                    <i class="fa-solid fa-dice text-accentRed"></i>
+                    <span>Випадковий</span>
+                </button>
+                <!-- Mobile menu toggle -->
+                <button onclick="toggleMobileMenu()" class="md:hidden p-2 rounded-lg bg-gray-800 text-gray-300 hover:text-white">
+                    <i class="fa-solid fa-bars text-lg"></i>
+                </button>
+            </div>
+        </div>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-darkBg border-b border-gray-800 px-4 pt-2 pb-4 space-y-2">
+            <button onclick="switchTab('home'); toggleMobileMenu()" class="block w-full text-left px-3 py-2 rounded-lg text-base font-medium text-white bg-gray-800/60">Головна</button>
+            <button onclick="switchTab('catalog'); toggleMobileMenu()" class="block w-full text-left px-3 py-2 rounded-lg text-base font-medium text-gray-300 hover:text-white">Каталог</button>
+            <button onclick="switchTab('favorites'); toggleMobileMenu()" class="flex justify-between items-center w-full px-3 py-2 rounded-lg text-base font-medium text-gray-300 hover:text-white">
+                <span>Моє обране</span>
+                <span id="mobile-fav-counter" class="bg-accentRed text-white text-xs px-2 py-0.5 rounded-full font-bold">0</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="flex-grow">
+        
+        <!-- HOME TAB -->
+        <div id="tab-home" class="space-y-12 pb-16">
+            <!-- Hero Banner Slider -->
+            <section class="relative h-[65vh] min-h-[480px] w-full overflow-hidden flex items-end">
+                <div id="hero-bg" class="absolute inset-0 bg-cover bg-center transition-all duration-1000 scale-105"></div>
+                <div class="absolute inset-0 hero-gradient"></div>
+                
+                <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-12 w-full z-10 space-y-4">
+                    <div class="flex items-center space-x-3">
+                        <span id="hero-badge" class="bg-accentRed text-white text-xs font-bold uppercase px-3 py-1 rounded-md tracking-wider shadow-lg">Український блокбастер</span>
+                        <div class="flex items-center space-x-1 text-amber-400 text-sm font-semibold">
+                            <i class="fa-solid fa-star"></i>
+                            <span id="hero-rating">9.5</span>
+                        </div>
+                        <span id="hero-year" class="text-gray-300 text-sm font-medium">2023</span>
+                        <span id="hero-duration" class="text-gray-400 text-sm font-medium">2г 35хв</span>
+                    </div>
+                    
+                    <h1 id="hero-title" class="text-4xl sm:text-6xl font-black text-white tracking-tight drop-shadow-md">Довбуш</h1>
+                    <p id="hero-desc" class="text-gray-300 text-base sm:text-lg max-w-2xl line-clamp-2 leading-relaxed">Карпати, XVIII століття. Жорстоке правління польської шляхти змушує карпатських опришків братися за зброю...</p>
+                    
+                    <div class="flex flex-wrap items-center gap-4 pt-2">
+                        <button id="hero-play-btn" onclick="openMovieModal(101)" class="bg-accentRed hover:bg-accentHover text-white px-8 py-3.5 rounded-xl font-bold flex items-center space-x-3 transition-all transform hover:scale-105 shadow-xl shadow-accentRed/30">
+                            <i class="fa-solid fa-play text-lg"></i>
+                            <span>Дивитися онлайн</span>
+                        </button>
+                        <button id="hero-info-btn" onclick="openMovieModal(101)" class="bg-gray-800/80 hover:bg-gray-700/80 backdrop-blur-md text-white border border-gray-700 px-6 py-3.5 rounded-xl font-semibold flex items-center space-x-3 transition-all">
+                            <i class="fa-solid fa-circle-info text-gray-400"></i>
+                            <span>Детальніше</span>
+                        </button>
+                        <button id="hero-fav-btn" onclick="toggleFavorite(101)" class="bg-gray-800/80 hover:bg-gray-700/80 backdrop-blur-md text-white border border-gray-700 p-3.5 rounded-xl font-semibold flex items-center justify-center transition-all">
+                            <i id="hero-fav-icon" class="fa-regular fa-bookmark text-xl"></i>
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Trending / Recommended Sections -->
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+                <!-- Section: Українське кіно -->
+                <section class="space-y-6">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-1.5 h-6 bg-accentRed rounded-full"></div>
+                            <h2 class="text-2xl font-bold tracking-tight text-white">Українське кіно</h2>
+                        </div>
+                        <button onclick="switchTabWithGenre('Українське')" class="text-sm font-semibold text-accentRed hover:text-red-400 transition-colors flex items-center space-x-1">
+                            <span>Дивитися всі</span>
+                            <i class="fa-solid fa-arrow-right text-xs"></i>
+                        </button>
+                    </div>
+                    <div id="ukr-movies-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 sm:gap-6">
+                        <!-- Populated by JS -->
+                    </div>
+                </section>
+
+                <!-- Section: Світові хіти та новинки -->
+                <section class="space-y-6">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-1.5 h-6 bg-blue-500 rounded-full"></div>
+                            <h2 class="text-2xl font-bold tracking-tight text-white">Світові блокбастери</h2>
+                        </div>
+                        <button onclick="switchTabWithGenre('Фантастика')" class="text-sm font-semibold text-blue-400 hover:text-blue-300 transition-colors flex items-center space-x-1">
+                            <span>Більше</span>
+                            <i class="fa-solid fa-arrow-right text-xs"></i>
+                        </button>
+                    </div>
+                    <div id="world-movies-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 sm:gap-6">
+                        <!-- Populated by JS -->
+                    </div>
+                </section>
+
+                <!-- Section: Європейське кіно та Драми -->
+                <section class="space-y-6">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-1.5 h-6 bg-amber-500 rounded-full"></div>
+                            <h2 class="text-2xl font-bold tracking-tight text-white">Драми та Європейське кіно</h2>
+                        </div>
+                        <button onclick="switchTabWithGenre('Драматичні')" class="text-sm font-semibold text-amber-400 hover:text-amber-300 transition-colors flex items-center space-x-1">
+                            <span>Більше</span>
+                            <i class="fa-solid fa-arrow-right text-xs"></i>
+                        </button>
+                    </div>
+                    <div id="drama-movies-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 sm:gap-6">
+                        <!-- Populated by JS -->
+                    </div>
+                </section>
+            </div>
+        </div>
+
+        <!-- CATALOG TAB -->
+        <div id="tab-catalog" class="hidden max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div>
+                    <h1 class="text-3xl font-black text-white">Повний каталог фільмів</h1>
+                    <p class="text-gray-400 text-sm mt-1">Добірка найкращих стрічок з професійним українським дубляжем</p>
+                </div>
+                <!-- Search & Filters -->
+                <div class="flex flex-wrap items-center gap-3">
+                    <div class="relative flex-grow sm:flex-grow-0">
+                        <input type="text" id="catalog-search" oninput="filterCatalog()" placeholder="Пошук за назвою..." class="bg-cardBg border border-gray-800 rounded-xl pl-10 pr-4 py-2.5 text-sm text-white focus:outline-none focus:border-accentRed w-full sm:w-64 transition-all">
+                        <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3.5 text-gray-400 text-sm"></i>
+                    </div>
+                    <select id="sort-select" onchange="filterCatalog()" class="bg-cardBg border border-gray-800 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-accentRed transition-all">
+                        <option value="rating">За рейтингом</option>
+                        <option value="year">За роком (нові)</option>
+                        <option value="title">За алфавітом</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Genre Filter Pills -->
+            <div class="flex items-center space-x-2 overflow-x-auto pb-2 scrollbar-thin">
+                <button onclick="setGenreFilter('Всі')" id="genre-btn-Всі" class="genre-pill px-4 py-2 rounded-xl text-sm font-semibold whitespace-nowrap transition-all bg-accentRed text-white shadow-md shadow-accentRed/20">Всі жанри</button>
+                <button onclick="setGenreFilter('Українське')" id="genre-btn-Українське" class="genre-pill px-4 py-2 rounded-xl text-sm font-semibold whitespace-nowrap transition-all bg-cardBg text-gray-300 hover:bg-gray-800 hover:text-white border border-gray-800">🇺🇦 Українське</button>
+                <button onclick="setGenreFilter('Бойовик')" id="genre-btn-Бойовик" class="genre-pill px-4 py-2 rounded-xl text-sm font-semibold whitespace-nowrap transition-all bg-cardBg text-gray-300 hover:bg-gray-800 hover:text-white border border-gray-800">Бойовик</button>
+                <button onclick="setGenreFilter('Комедія')" id="genre-btn-Комедія" class="genre-pill px-4 py-2 rounded-xl text-sm font-semibold whitespace-nowrap transition-all bg-cardBg text-gray-300 hover:bg-gray-800 hover:text-white border border-gray-800">Комедія</button>
+                <button onclick="setGenreFilter('Драматичні')" id="genre-btn-Драматичні" class="genre-pill px-4 py-2 rounded-xl text-sm font-semibold whitespace-nowrap transition-all bg-cardBg text-gray-300 hover:bg-gray-800 hover:text-white border border-gray-800">Драми</button>
+                <button onclick="setGenreFilter('Фантастика')" id="genre-btn-Фантастика" class="genre-pill px-4 py-2 rounded-xl text-sm font-semibold whitespace-nowrap transition-all bg-cardBg text-gray-300 hover:bg-gray-800 hover:text-white border border-gray-800">Фантастика</button>
+                <button onclick="setGenreFilter('Жахи')" id="genre-btn-Жахи" class="genre-pill px-4 py-2 rounded-xl text-sm font-semibold whitespace-nowrap transition-all bg-cardBg text-gray-300 hover:bg-gray-800 hover:text-white border border-gray-800">Жахи</button>
+                <button onclick="setGenreFilter('Мультфільми')" id="genre-btn-Мультфільми" class="genre-pill px-4 py-2 rounded-xl text-sm font-semibold whitespace-nowrap transition-all bg-cardBg text-gray-300 hover:bg-gray-800 hover:text-white border border-gray-800">Мультфільми</button>
+            </div>
+
+            <!-- Catalog Movies Grid -->
+            <div id="catalog-movies-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 sm:gap-6">
+                <!-- Populated by JS -->
+            </div>
+            
+            <!-- Empty state for catalog -->
+            <div id="catalog-empty" class="hidden text-center py-20 space-y-4">
+                <div class="text-6xl text-gray-600"><i class="fa-solid fa-film"></i></div>
+                <h3 class="text-xl font-bold text-white">Нічого не знайдено</h3>
+                <p class="text-gray-400 text-sm">Спробуйте змінити параметри пошуку або обраний жанр.</p>
+            </div>
+        </div>
+
+        <!-- FAVORITES TAB -->
+        <div id="tab-favorites" class="hidden max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+            <div>
+                <h1 class="text-3xl font-black text-white">Моє обране</h1>
+                <p class="text-gray-400 text-sm mt-1">Фільми, які ви зберегли для перегляду пізніше</p>
+            </div>
+
+            <div id="favorites-movies-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 sm:gap-6">
+                <!-- Populated by JS -->
+            </div>
+
+            <!-- Empty state for favorites -->
+            <div id="favorites-empty" class="hidden text-center py-24 space-y-4">
+                <div class="w-20 h-20 bg-gray-900 border border-gray-800 rounded-full flex items-center justify-center mx-auto text-3xl text-gray-500">
+                    <i class="fa-regular fa-bookmark"></i>
+                </div>
+                <h3 class="text-xl font-bold text-white">Список обраного порожній</h3>
+                <p class="text-gray-400 text-sm max-w-sm mx-auto">Додавайте цікаві фільми до обраного, натискаючи на іконку закладки на картці або сторінці фільму.</p>
+                <button onclick="switchTab('catalog')" class="bg-accentRed hover:bg-accentHover text-white px-6 py-2.5 rounded-xl font-bold text-sm transition-all shadow-lg shadow-accentRed/20 inline-block mt-2">Перейти до каталогу</button>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- MOVIE DETAILS & PLAYER MODAL -->
+    <div id="movie-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md hidden items-center justify-center p-2 sm:p-4 overflow-y-auto">
+        <div id="modal-content-box" class="bg-darkBg border border-gray-800 w-full max-w-5xl rounded-3xl overflow-hidden shadow-2xl relative my-auto transition-all transform scale-95 opacity-0 duration-300">
+            
+            <!-- Close Button -->
+            <button onclick="closeMovieModal()" class="absolute top-4 right-4 z-20 w-10 h-10 rounded-full bg-black/60 hover:bg-accentRed text-white flex items-center justify-center transition-all backdrop-blur-md">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+
+            <!-- Video Player Area -->
+            <div class="relative w-full aspect-video bg-black">
+                <iframe id="modal-player" class="w-full h-full border-0" src="" allowfullscreen></iframe>
+            </div>
+
+            <!-- Movie Info Content -->
+            <div class="p-6 sm:p-8 space-y-8">
+                <!-- Top Details Row -->
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 border-b border-gray-800 pb-6">
+                    <div class="space-y-3">
+                        <div class="flex items-center space-x-3">
+                            <span id="modal-genre" class="bg-accentRed/20 text-accentRed border border-accentRed/30 text-xs font-bold uppercase px-3 py-1 rounded-md tracking-wider">Бойовик</span>
+                            <div class="flex items-center space-x-1 text-amber-400 text-sm font-semibold">
+                                <i class="fa-solid fa-star"></i>
+                                <span id="modal-rating">8.8</span>
+                            </div>
+                            <span id="modal-year" class="text-gray-400 text-sm font-medium">2024</span>
+                            <span id="modal-duration" class="text-gray-400 text-sm font-medium">2г 15хв</span>
+                        </div>
+                        <h2 id="modal-title" class="text-3xl sm:text-4xl font-black text-white tracking-tight">Назва фільму</h2>
+                    </div>
+                    <div class="flex items-center space-x-3">
+                        <button id="modal-fav-btn" onclick="toggleModalFavorite()" class="bg-gray-800 hover:bg-gray-700 text-white border border-gray-700 px-5 py-3 rounded-xl font-semibold flex items-center space-x-2 transition-all">
+                            <i id="modal-fav-icon" class="fa-regular fa-bookmark"></i>
+                            <span id="modal-fav-text">В обране</span>
+                        </button>
+                        <button onclick="shareMovie()" class="bg-gray-800 hover:bg-gray-700 text-white border border-gray-700 p-3 rounded-xl font-semibold flex items-center justify-center transition-all" title="Поділитися">
+                            <i class="fa-solid fa-share-nodes"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Description & Cast Grid -->
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    <div class="lg:col-span-2 space-y-4">
+                        <h3 class="text-lg font-bold text-white flex items-center space-x-2">
+                            <i class="fa-solid fa-align-left text-accentRed"></i>
+                            <span>Про сюжет</span>
+                        </h3>
+                        <p id="modal-desc" class="text-gray-300 text-sm sm:text-base leading-relaxed">Детальний опис фільму...</p>
+                        
+                        <!-- Cast -->
+                        <div class="pt-4 space-y-3">
+                            <h4 class="text-sm font-bold text-gray-400 uppercase tracking-wider">У головних ролях</h4>
+                            <div id="modal-cast" class="flex flex-wrap gap-2">
+                                <!-- Populated by JS -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Sidebar info box -->
+                    <div class="bg-cardBg border border-gray-800 p-6 rounded-2xl space-y-4 h-fit">
+                        <h4 class="text-sm font-bold text-white uppercase tracking-wider border-b border-gray-800 pb-3">Інформація</h4>
+                        <div class="space-y-2.5 text-sm">
+                            <div class="flex justify-between">
+                                <span class="text-gray-400">Країна:</span>
+                                <span id="modal-country" class="font-medium text-white">США</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-400">Режисер:</span>
+                                <span id="modal-director" class="font-medium text-white">Ім'я Режисера</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-400">Озвучення:</span>
+                                <span class="font-medium text-accentRed">Професійне (Український дубляж)</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-400">Якість:</span>
+                                <span class="font-medium text-white">1080p Full HD</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Reviews Section -->
+                <div class="pt-6 border-t border-gray-800 space-y-6">
+                    <div class="flex items-center justify-between">
+                        <h3 class="text-xl font-bold text-white flex items-center space-x-2">
+                            <i class="fa-solid fa-comments text-accentRed"></i>
+                            <span>Відгуки глядачів</span>
+                            <span id="reviews-count" class="text-xs bg-gray-800 text-gray-300 px-2 py-0.5 rounded-full">0</span>
+                        </h3>
+                    </div>
+
+                    <!-- Add Review Form -->
+                    <div class="bg-cardBg border border-gray-800 p-4 sm:p-6 rounded-2xl space-y-4">
+                        <h4 class="text-sm font-bold text-white">Залишити свій відгук</h4>
+                        <form id="review-form" onsubmit="submitReview(event)" class="space-y-4">
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <input type="text" id="reviewer-name" required placeholder="Ваше ім'я" class="bg-gray-900 border border-gray-800 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-accentRed">
+                                <select id="reviewer-rating" class="bg-gray-900 border border-gray-800 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-accentRed">
+                                    <option value="5">⭐⭐⭐⭐⭐ Чудовий фільм (5/5)</option>
+                                    <option value="4">⭐⭐⭐⭐ Добре (4/5)</option>
+                                    <option value="3">⭐⭐⭐ Нормально (3/5)</option>
+                                    <option value="2">⭐⭐ Слабо (2/5)</option>
+                                    <option value="1">⭐ Не сподобалось (1/5)</option>
+                                </select>
+                            </div>
+                            <textarea id="reviewer-text" required rows="3" placeholder="Ваші враження від перегляду..." class="bg-gray-900 border border-gray-800 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-accentRed w-full"></textarea>
+                            <div class="flex justify-end">
+                                <button type="submit" class="bg-accentRed hover:bg-accentHover text-white px-6 py-2.5 rounded-xl font-bold text-sm transition-all shadow-lg shadow-accentRed/20">Опублікувати відгук</button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Reviews List -->
+                    <div id="reviews-list" class="space-y-4">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-cardBg border-t border-gray-800 py-10 mt-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-6">
+            <div class="flex items-center space-x-3">
+                <div class="w-8 h-8 rounded-lg bg-accentRed flex items-center justify-center text-white font-bold text-lg">
+                    <i class="fa-solid fa-play"></i>
+                </div>
+                <span class="text-xl font-black tracking-wider text-white">KINO<span class="text-accentRed">UA</span></span>
+            </div>
+            <p class="text-gray-400 text-sm text-center md:text-left">© 2026 KinoUA. Сучасний онлайн-кінотеатр українською мовою. Усі права захищені.</p>
+            <div class="flex items-center space-x-4 text-gray-400 text-lg">
+                <a href="#" class="hover:text-white transition-colors"><i class="fa-brands fa-telegram"></i></a>
+                <a href="#" class="hover:text-white transition-colors"><i class="fa-brands fa-instagram"></i></a>
+                <a href="#" class="hover:text-white transition-colors"><i class="fa-brands fa-youtube"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Notification Toast -->
+    <div id="toast" class="fixed bottom-6 right-6 z-50 bg-gray-900 border border-gray-700 text-white px-6 py-3 rounded-2xl shadow-2xl transform translate-y-20 opacity-0 transition-all duration-300 flex items-center space-x-3">
+        <i id="toast-icon" class="fa-solid fa-circle-check text-green-500 text-lg"></i>
+        <span id="toast-msg" class="text-sm font-semibold">Повідомлення</span>
+    </div>
+
+    <!-- Application JavaScript Logic -->
+    <script>
+        // Expanded database of Ukrainian, European, and World hits in Ukrainian dubbing
+        const movies = [
+            {
+                id: 101,
+                title: "Довбуш",
+                genre: "Українське",
+                year: 2023,
+                rating: 9.5,
+                duration: "2г 35хв",
+                country: "Україна",
+                director: "Олесь Санін",
+                cast: ["Сергій Стрельніков", "Олексій Гнатковський", "Даша Плахтій", "Лукаш Барщ"],
+                desc: "Карпати, XVIII століття. Жорстоке правління польської шляхти змушує карпатських опришків братися за зброю. Брати Олекса та Іван Довбуші опиняються по різні боки закону. Народна легенда про опришківського ватажка, який боровся за свободу рідної землі.",
+                banner: "https://tykyiv.com/media/%D0%94%D0%BE%D0%B2%D0%B1%D1%83%D1%88_g251no2.jpg",
+                poster: "https://cdn.planetakino.ua/79_dovbus_2023/Media/Posters/vertical/opt_2e3196d9-bcad-45ee-b4d7-1776fa396f6d.jpg",
+                trailer: "https://www.youtube.com/embed/35gH2qKViQs"
+            },
+            {
+                id: 102,
+                title: "Памфір",
+                genre: "Українське",
+                year: 2022,
+                rating: 8.9,
+                duration: "1г 45хв",
+                country: "Україна, Франція, Польща",
+                director: "Дмитро Сухолиткий-Собчук",
+                cast: ["Олександр Яцентюк", "Соломія Кирилова", "Станислав Кітяєв"],
+                desc: "Головний герой — заробітчанин Памфір, який повертається до своєї родини в західній Україні перед традиційним карнавалом Маланки. Помилки минулого змушують його знову ризикувати заради сина.",
+                banner: "https://cdn4.suspilne.media/images/resize/1040x1.78/23bb79a29709d17a.jpg",
+                poster: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQdPGBWnXqxksZzcRoczPCv44aOAVVXQqhz3_MiXUC2-A&s=10",
+                trailer: "https://www.youtube.com/embed/bRqmFp7ZdC8"
+            },
+            {
+                id: 103,
+                title: "Люксембург, Люксембург",
+                genre: "Українське",
+                year: 2023,
+                rating: 8.8,
+                duration: "1г 46хв",
+                country: "Україна",
+                director: "Антоніо Лукіч",
+                cast: ["Аміл Насіров", "Раміл Насіров", "Ніна Насірова"],
+                desc: "Коли брати-близнюки дізнаються, що їхній давно зниклий батько захворів у Люксембурзі, вони вирушають у мандрівку, щоб побачити його востаннє, але на них чекають непередбачувані пригоди.",
+                banner: "https://images.unsplash.com/photo-1508739773434-c26b3d09e071?q=80&w=1600&auto=format&fit=crop",
+                poster: "https://images.unsplash.com/photo-1508739773434-c26b3d09e071?q=80&w=600&auto=format&fit=crop",
+                trailer: "https://www.youtube.com/embed/5UuFvG8G7vM"
+            },
+            {
+                id: 1,
+                title: "Дюна: Частина друга",
+                genre: "Фантастика",
+                year: 2024,
+                rating: 9.3,
+                duration: "2г 46хв",
+                country: "США",
+                director: "Дені Вільнев",
+                cast: ["Тімоті Шаламе", "Зендея", "Ребекка Фергюсон", "Хав'єр Бардем", "Остін Батлер"],
+                desc: "Пол Атрідес об'єднується з Чані та фріменами, вирушаючи на шлях помсти змовникам, які знищили його родину. Стоячи перед вибором між коханням життя та долею всесвіту.",
+                banner: "https://images.unsplash.com/photo-1534447677768-be436bb09401?q=80&w=1600&auto=format&fit=crop",
+                poster: "https://images.unsplash.com/photo-1534447677768-be436bb09401?q=80&w=600&auto=format&fit=crop",
+                trailer: "https://www.youtube.com/embed/Way9Dexny3w"
+            },
+            {
+                id: 2,
+                title: "Оппенгеймер",
+                genre: "Драматичні",
+                year: 2023,
+                rating: 9.0,
+                duration: "3г 00хв",
+                country: "США, Велика Британія",
+                director: "Крістофер Нолан",
+                cast: ["Кілліан Мерфі", "Емілі Блант", "Метт Деймон", "Роберт Дауні мол."],
+                desc: "Біографічна драма про американського фізика Джуліуса Роберта Оппенгеймера, який очолював розробку першої ядерної бомби у секретному Манхеттенському проєкті.",
+                banner: "https://images.unsplash.com/photo-1440404653325-ab127d49abc1?q=80&w=1600&auto=format&fit=crop",
+                poster: "https://images.unsplash.com/photo-1440404653325-ab127d49abc1?q=80&w=600&auto=format&fit=crop",
+                trailer: "https://www.youtube.com/embed/uYPbbksJxIg"
+            },
+            {
+                id: 3,
+                title: "Інтерстеллар",
+                genre: "Фантастика",
+                year: 2014,
+                rating: 9.4,
+                duration: "2г 49хв",
+                country: "США, Велика Британія",
+                director: "Крістофер Нолан",
+                cast: ["Метью Макконехі", "Енн Гетевей", "Джессіка Честейн", "Майкл Кейн"],
+                desc: "Коли виснаження ресурсів загрожує людству голодом, команда дослідників вирушає крізь чорну діру в космосі у пошуках нового придатного для життя дому.",
+                banner: "https://images.unsplash.com/photo-1506703719100-a0f3a48c0f86?q=80&w=1600&auto=format&fit=crop",
+                poster: "https://images.unsplash.com/photo-1506703719100-a0f3a48c0f86?q=80&w=600&auto=format&fit=crop",
+                trailer: "https://www.youtube.com/embed/zSWdZVtXT7E"
+            },
+            {
+                id: 4,
+                title: "Матриця",
+                genre: "Фантастика",
+                year: 1999,
+                rating: 8.7,
+                duration: "2г 16хв",
+                country: "США",
+                director: "Лана та Лідллі Вачовскі",
+                cast: ["Кіану Рівз", "Лоренс Фішберн", "Керрі-Енн Мосс", "Гьюго Вівінг"],
+                desc: "Хакер Нео дізнається від таємничих повстанців, що звичний світ — це лише віртуальна ілюзія, створена штучним інтелектом для поневолення людей.",
+                banner: "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?q=80&w=1600&auto=format&fit=crop",
+                poster: "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?q=80&w=600&auto=format&fit=crop",
+                trailer: "https://www.youtube.com/embed/vKQi3bBA1y8"
+            },
+            {
+                id: 5,
+                title: "Аватар: Шлях води",
+                genre: "Фантастика",
+                year: 2022,
+                rating: 8.6,
+                duration: "3г 12хв",
+                country: "США",
+                director: "Джеймс Кемерон",
+                cast: ["Сем Вортінгтон", "Зої Салдана", "Сігурні Вівер", "Кейт Вінслет"],
+                desc: "Джейк Саллі разом із родиною навка і на'ві захищає свою планету Пандора від нових загарбників із Землі, знаходячи прихисток у водяних кланів.",
+                banner: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?q=80&w=1600&auto=format&fit=crop",
+                poster: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?q=80&w=600&auto=format&fit=crop",
+                trailer: "https://www.youtube.com/embed/d9MyW72ELq0"
+            },
+            {
+                id: 6,
+                title: "Джон Вік 4",
+                genre: "Бойовик",
+                year: 2023,
+                rating: 8.5,
+                duration: "2г 49хв",
+                country: "США",
+                director: "Чад Стахелські",
+                cast: ["Кіану Рівз", "Дієн Єн", "Білл Скарсгард", "Лоренс Фішберн"],
+                desc: "Джон Вік знаходить спосіб перемогти Високий Стол, але перед цим мусить зіткнутися з новим могутнім ворогом із глобальними зв'язками.",
+                banner: "https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?q=80&w=1600&auto=format&fit=crop",
+                poster: "https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?q=80&w=600&auto=format&fit=crop",
+                trailer: "https://www.youtube.com/embed/qEVUtrk8_B4"
+            },
+            {
+                id: 7,
+                title: "Барбі",
+                genre: "Комедія",
+                year: 2023,
+                rating: 7.9,
+                duration: "1г 54хв",
+                country: "США, Велика Британія",
+                director: "Грета Гервіг",
+                cast: ["Марго Роббі", "Раян Гослінг", "Америка Феррера"],
+                desc: "Барбі виганяють із Барбіленду через недосконалість. Вона вирушає до реального світу в пошуках істинного сенсу та самопізнання.",
+                banner: "https://images.unsplash.com/photo-1513151233558-d860c5398176?q=80&w=1600&auto=format&fit=crop",
+                poster: "https://images.unsplash.com/photo-1513151233558-d860c5398176?q=80&w=600&auto=format&fit=crop",
+                trailer: "https://www.youtube.com/embed/pBk4NYhWNMM"
+            },
+            {
+                id: 8,
+                title: "Воно",
+                genre: "Жахи",
+                year: 2017,
+                rating: 8.0,
+                duration: "2г 15хв",
+                country: "США",
+                director: "Андрес Мускетті",
+                cast: ["Білл Скарсгард", "Джейден Мартелл", "Фінн Вулфгард"],
+                desc: "У містечку Деррі семеро дітей об'єднуються в «Клуб невдах», щоб протистояти стародавньому малефіку, що приймає форму моторошного клоуна.",
+                banner: "https://images.unsplash.com/photo-1509198397868-475647b2a1e5?q=80&w=1600&auto=format&fit=crop",
+                poster: "https://images.unsplash.com/photo-1509198397868-475647b2a1e5?q=80&w=600&auto=format&fit=crop",
+                trailer: "https://www.youtube.com/embed/FnCdOQsX5kc"
+            },
+            {
+                id: 9,
+                title: "Людина-павук: Крізь всесвіти",
+                genre: "Мультфільми",
+                year: 2023,
+                rating: 9.1,
+                duration: "2г 20хв",
+                country: "США",
+                director: "Хоакім Дос Сантос",
+                cast: ["Шамеїк Мур", "Гейлі Стайнфелд", "Оскар Айзек"],
+                desc: "Майлз Моралес вирушає у грандіозну пригоду мультивсесвітом разом з командою супергероїв, щоб змінити власну долю.",
+                banner: "https://images.unsplash.com/photo-1635805737707-575885ab0820?q=80&w=1600&auto=format&fit=crop",
+                poster: "https://images.unsplash.com/photo-1635805737707-575885ab0820?q=80&w=600&auto=format&fit=crop",
+                trailer: "https://www.youtube.com/embed/cqGjhVJWtEg"
+            }
+        ];
+
+        // App state
+        let favorites = JSON.parse(localStorage.getItem('kinoua_favorites')) || [101, 1];
+        let reviewsData = JSON.parse(localStorage.getItem('kinoua_reviews')) || {
+            101: [
+                { name: "Олександр", rating: 5, text: "Неймовірний український фільм! Атмосфера Карпат передана неперевершено.", date: "15.03.2026" },
+                { name: "Марія", rating: 5, text: "Пишаюся нашим кінематографом. Емоції неймовірні!", date: "14.03.2026" }
+            ],
+            1: [
+                { name: "Максим", rating: 5, text: "Шедевр наукової фантастики з прекрасним українським дубляжем.", date: "10.03.2026" }
+            ]
+        };
+        let currentActiveTab = 'home';
+        let currentGenreFilter = 'Всі';
+        let currentMovieId = null;
+
+        // Initialization on load
+        window.onload = function() {
+            renderHomeBanner();
+            renderMoviesGrids();
+            updateFavoriteCounters();
+        };
+
+        // Tab Switching
+        function switchTab(tabId) {
+            currentActiveTab = tabId;
+            ['home', 'catalog', 'favorites'].forEach(t => {
+                const el = document.getElementById(`tab-${t}`);
+                const nav = document.getElementById(`nav-${t}`);
+                if (t === tabId) {
+                    el.classList.remove('hidden');
+                    if(nav) nav.className = "px-4 py-2 rounded-lg text-sm font-medium transition-colors text-white bg-gray-800/60";
+                } else {
+                    el.classList.add('hidden');
+                    if(nav) nav.className = "px-4 py-2 rounded-lg text-sm font-medium transition-colors text-gray-400 hover:text-white hover:bg-gray-800/40";
+                }
+            });
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            if (tabId === 'catalog') filterCatalog();
+            if (tabId === 'favorites') renderFavorites();
+        }
+
+        function switchTabWithGenre(genre) {
+            switchTab('catalog');
+            setGenreFilter(genre);
+        }
+
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        }
+
+        // Render Home Banner & Grids
+        function renderHomeBanner() {
+            const movie = movies[0]; // Dovbush as hero
+            document.getElementById('hero-bg').style.backgroundImage = `url('${movie.banner}')`;
+            document.getElementById('hero-badge').innerText = movie.genre === 'Українське' ? '🇺🇦 Український хіт' : movie.genre;
+            document.getElementById('hero-rating').innerText = movie.rating;
+            document.getElementById('hero-year').innerText = movie.year;
+            document.getElementById('hero-duration').innerText = movie.duration;
+            document.getElementById('hero-title').innerText = movie.title;
+            document.getElementById('hero-desc').innerText = movie.desc;
+            document.getElementById('hero-play-btn').setAttribute('onclick', `openMovieModal(${movie.id})`);
+            document.getElementById('hero-info-btn').setAttribute('onclick', `openMovieModal(${movie.id})`);
+            document.getElementById('hero-fav-btn').setAttribute('onclick', `toggleFavorite(${movie.id})`);
+            updateFavIconState(movie.id, 'hero-fav-icon');
+        }
+
+        function renderMoviesGrids() {
+            // Ukrainian movies
+            const ukrContainer = document.getElementById('ukr-movies-grid');
+            const ukrMovies = movies.filter(m => m.genre === 'Українське');
+            ukrContainer.innerHTML = ukrMovies.map(m => createMovieCardHTML(m)).join('');
+
+            // World blockbusters
+            const worldContainer = document.getElementById('world-movies-grid');
+            const worldMovies = movies.filter(m => m.genre === 'Фантастика' || m.genre === 'Бойовик');
+            worldContainer.innerHTML = worldMovies.map(m => createMovieCardHTML(m)).join('');
+
+            // Dramas
+            const dramaContainer = document.getElementById('drama-movies-grid');
+            const dramaMovies = movies.filter(m => m.genre === 'Драматичні' || m.genre === 'Комедія');
+            dramaContainer.innerHTML = dramaMovies.map(m => createMovieCardHTML(m)).join('');
+        }
+
+        function createMovieCardHTML(movie) {
+            const isFav = favorites.includes(movie.id);
+            return `
+                <div class="movie-card bg-cardBg border border-gray-800/80 rounded-2xl overflow-hidden flex flex-col group cursor-pointer relative shadow-lg">
+                    <div class="relative aspect-[2/3] overflow-hidden bg-gray-900" onclick="openMovieModal(${movie.id})">
+                        <img src="${movie.poster}" alt="${movie.title}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" onerror="this.src='https://placehold.co/600x900/131b2e/ffffff?text=KinoUA'">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-60 group-hover:opacity-80 transition-opacity"></div>
+                        
+                        <!-- Rating badge -->
+                        <div class="absolute top-3 left-3 bg-black/60 backdrop-blur-md px-2.5 py-1 rounded-lg flex items-center space-x-1 text-amber-400 text-xs font-bold border border-white/10">
+                            <i class="fa-solid fa-star"></i>
+                            <span>${movie.rating}</span>
+                        </div>
+
+                        <!-- Favorite quick button -->
+                        <button onclick="event.stopPropagation(); toggleFavorite(${movie.id})" class="absolute top-3 right-3 w-9 h-9 rounded-xl bg-black/60 backdrop-blur-md hover:bg-accentRed text-white flex items-center justify-center transition-all border border-white/10">
+                            <i class="${isFav ? 'fa-solid text-accentRed' : 'fa-regular'} fa-bookmark card-fav-${movie.id}"></i>
+                        </button>
+
+                        <div class="absolute bottom-3 left-3 right-3 flex items-center justify-between text-xs text-gray-300 font-medium">
+                            <span class="bg-gray-800/80 px-2.5 py-1 rounded-md backdrop-blur-sm">${movie.year}</span>
+                            <span class="text-accentRed font-bold bg-gray-900/90 px-2.5 py-1 rounded-md">${movie.genre}</span>
+                        </div>
+                    </div>
+                    <div class="p-4 flex flex-col flex-grow justify-between bg-cardBg" onclick="openMovieModal(${movie.id})">
+                        <h3 class="font-bold text-white text-base line-clamp-1 group-hover:text-accentRed transition-colors">${movie.title}</h3>
+                        <p class="text-xs text-gray-400 mt-1 line-clamp-1">${movie.director}</p>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Catalog filter & search
+        function setGenreFilter(genre) {
+            currentGenreFilter = genre;
+            document.querySelectorAll('.genre-pill').forEach(btn => {
+                btn.className = "genre-pill px-4 py-2 rounded-xl text-sm font-semibold whitespace-nowrap transition-all bg-cardBg text-gray-300 hover:bg-gray-800 hover:text-white border border-gray-800";
+            });
+            const activeBtn = document.getElementById(`genre-btn-${genre}`);
+            if(activeBtn) {
+                activeBtn.className = "genre-pill px-4 py-2 rounded-xl text-sm font-semibold whitespace-nowrap transition-all bg-accentRed text-white shadow-md shadow-accentRed/20";
+            }
+            filterCatalog();
+        }
+
+        function filterCatalog() {
+            const searchQuery = document.getElementById('catalog-search').value.toLowerCase();
+            const sortBy = document.getElementById('sort-select').value;
+
+            let filtered = movies.filter(m => {
+                const matchGenre = currentGenreFilter === 'Всі' || m.genre === currentGenreFilter;
+                const matchSearch = m.title.toLowerCase().includes(searchQuery) || m.director.toLowerCase().includes(searchQuery);
+                return matchGenre && matchSearch;
+            });
+
+            // Sorting
+            filtered.sort((a, b) => {
+                if (sortBy === 'rating') return b.rating - a.rating;
+                if (sortBy === 'year') return b.year - a.year;
+                if (sortBy === 'title') return a.title.localeCompare(b.title);
+            });
+
+            const grid = document.getElementById('catalog-movies-grid');
+            const emptyState = document.getElementById('catalog-empty');
+
+            if (filtered.length === 0) {
+                grid.innerHTML = '';
+                emptyState.classList.remove('hidden');
+            } else {
+                emptyState.classList.add('hidden');
+                grid.innerHTML = filtered.map(m => createMovieCardHTML(m)).join('');
+            }
+        }
+
+        function handleGlobalSearch(val) {
+            if (val.trim().length > 0) {
+                if (currentActiveTab !== 'catalog') {
+                    switchTab('catalog');
+                }
+                document.getElementById('catalog-search').value = val;
+                filterCatalog();
+            }
+        }
+
+        // Favorites management
+        function toggleFavorite(movieId) {
+            const index = favorites.indexOf(movieId);
+            if (index > -1) {
+                favorites.splice(index, 1);
+                showToast("Видалено з обраного");
+            } else {
+                favorites.push(movieId);
+                showToast("Додано до обраного");
+            }
+            localStorage.setItem('kinoua_favorites', JSON.stringify(favorites));
+            updateFavoriteCounters();
+            renderMoviesGrids();
+            if (currentActiveTab === 'catalog') filterCatalog();
+            if (currentActiveTab === 'favorites') renderFavorites();
+            if (currentMovieId === movieId) updateModalFavState();
+            updateHeroFavState();
+        }
+
+        function updateFavoriteCounters() {
+            const count = favorites.length;
+            document.getElementById('fav-counter').innerText = count;
+            document.getElementById('mobile-fav-counter').innerText = count;
+        }
+
+        function updateFavIconState(movieId, elementId) {
+            const icon = document.getElementById(elementId);
+            if (!icon) return;
+            if (favorites.includes(movieId)) {
+                icon.className = "fa-solid fa-bookmark text-accentRed text-xl";
+            } else {
+                icon.className = "fa-regular fa-bookmark text-xl";
+            }
+        }
+
+        function updateHeroFavState() {
+            updateFavIconState(movies[0].id, 'hero-fav-icon');
+        }
+
+        function updateModalFavState() {
+            const icon = document.getElementById('modal-fav-icon');
+            const text = document.getElementById('modal-fav-text');
+            if (favorites.includes(currentMovieId)) {
+                icon.className = "fa-solid fa-bookmark text-accentRed";
+                text.innerText = "В обраному";
+            } else {
+                icon.className = "fa-regular fa-bookmark";
+                text.innerText = "В обране";
+            }
+        }
+
+        function toggleModalFavorite() {
+            if (currentMovieId) {
+                toggleFavorite(currentMovieId);
+            }
+        }
+
+        function renderFavorites() {
+            const grid = document.getElementById('favorites-movies-grid');
+            const emptyState = document.getElementById('favorites-empty');
+            const favMovies = movies.filter(m => favorites.includes(m.id));
+
+            if (favMovies.length === 0) {
+                grid.innerHTML = '';
+                emptyState.classList.remove('hidden');
+            } else {
+                emptyState.classList.add('hidden');
+                grid.innerHTML = favMovies.map(m => createMovieCardHTML(m)).join('');
+            }
+        }
+
+        // Random Movie Picker
+        function openRandomMovie() {
+            const randomIndex = Math.floor(Math.random() * movies.length);
+            openMovieModal(movies[randomIndex].id);
+        }
+
+        // Movie Modal & Player
+        function openMovieModal(movieId) {
+            currentMovieId = movieId;
+            const movie = movies.find(m => m.id === movieId);
+            if (!movie) return;
+
+            document.getElementById('modal-genre').innerText = movie.genre;
+            document.getElementById('modal-rating').innerText = movie.rating;
+            document.getElementById('modal-year').innerText = movie.year;
+            document.getElementById('modal-duration').innerText = movie.duration;
+            document.getElementById('modal-title').innerText = movie.title;
+            document.getElementById('modal-desc').innerText = movie.desc;
+            document.getElementById('modal-country').innerText = movie.country;
+            document.getElementById('modal-director').innerText = movie.director;
+
+            // Cast
+            const castContainer = document.getElementById('modal-cast');
+            castContainer.innerHTML = movie.cast.map(actor => `<span class="bg-gray-900 border border-gray-800 text-gray-300 text-xs px-3 py-1.5 rounded-lg font-medium">${actor}</span>`).join('');
+
+            // Trailer Player
+            const player = document.getElementById('modal-player');
+            player.src = movie.trailer;
+
+            updateModalFavState();
+            renderReviews(movieId);
+
+            const modal = document.getElementById('movie-modal');
+            const box = document.getElementById('modal-content-box');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            setTimeout(() => {
+                box.classList.remove('scale-95', 'opacity-0');
+                box.classList.add('scale-100', 'opacity-100');
+            }, 10);
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeMovieModal() {
+            const modal = document.getElementById('movie-modal');
+            const box = document.getElementById('modal-content-box');
+            box.classList.remove('scale-100', 'opacity-100');
+            box.classList.add('scale-95', 'opacity-0');
+            document.getElementById('modal-player').src = ''; // stop trailer
+            setTimeout(() => {
+                modal.classList.remove('flex');
+                modal.classList.add('hidden');
+                document.body.style.overflow = 'auto';
+            }, 300);
+        }
+
+        // Reviews System
+        function renderReviews(movieId) {
+            const list = document.getElementById('reviews-list');
+            const countEl = document.getElementById('reviews-count');
+            const movieReviews = reviewsData[movieId] || [];
+
+            countEl.innerText = movieReviews.length;
+
+            if (movieReviews.length === 0) {
+                list.innerHTML = `<p class="text-gray-500 text-sm italic py-2">Ще немає відгуків. Будьте першим!</p>`;
+                return;
+            }
+
+            list.innerHTML = movieReviews.map(rev => `
+                <div class="bg-gray-900 border border-gray-800/80 p-4 rounded-xl space-y-2">
+                    <div class="flex items-center justify-between">
+                        <span class="font-bold text-white text-sm">${rev.name}</span>
+                        <div class="flex items-center space-x-2">
+                            <div class="text-amber-400 text-xs">${'⭐'.repeat(rev.rating)}</div>
+                            <span class="text-gray-500 text-xs">${rev.date}</span>
+                        </div>
+                    </div>
+                    <p class="text-gray-300 text-sm leading-relaxed">${rev.text}</p>
+                </div>
+            `).join('');
+        }
+
+        function submitReview(e) {
+            e.preventDefault();
+            const name = document.getElementById('reviewer-name').value;
+            const rating = parseInt(document.getElementById('reviewer-rating').value);
+            const text = document.getElementById('reviewer-text').value;
+
+            if (!reviewsData[currentMovieId]) {
+                reviewsData[currentMovieId] = [];
+            }
+
+            const now = new Date();
+            const dateStr = String(now.getDate()).padStart(2, '0') + '.' + String(now.getMonth() + 1).padStart(2, '0') + '.' + now.getFullYear();
+
+            reviewsData[currentMovieId].unshift({ name, rating, text, date: dateStr });
+            localStorage.setItem('kinoua_reviews', JSON.stringify(reviewsData));
+
+            document.getElementById('review-form').reset();
+            renderReviews(currentMovieId);
+            showToast("Відгук успішно опубліковано!");
+        }
+
+        // Share Feature
+        function shareMovie() {
+            const movie = movies.find(m => m.id === currentMovieId);
+            if (!movie) return;
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText(window.location.href).then(() => {
+                    showToast("Посилання скопійовано до буферу обміну!");
+                }).catch(() => {
+                    showToast("Поділитися успішно!");
+                });
+            } else {
+                showToast("Поділитися успішно!");
+            }
+        }
+
+        // Toast Notification Helper
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            const msgEl = document.getElementById('toast-msg');
+            msgEl.innerText = msg;
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            toast.classList.add('translate-y-0', 'opacity-100');
+            setTimeout(() => {
+                toast.classList.remove('translate-y-0', 'opacity-100');
+                toast.classList.add('translate-y-20', 'opacity-0');
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
