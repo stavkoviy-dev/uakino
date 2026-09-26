@@ -35,20 +35,20 @@
         body {
             background-color: #0b051d;
             background-image: radial-gradient(circle at 20% 30%, rgba(157, 0, 255, 0.15) 0%, transparent 40%),
-                              radial-gradient(circle at 80% 70%, rgba(255, 0, 127, 0.15) 0%, transparent 40%);
+                            radial-gradient(circle at 80% 70%, rgba(255, 0, 127, 0.15) 0%, transparent 40%);
         }
     </style>
 </head>
 <body class="bg-darkBg text-gray-100 min-h-screen flex flex-col font-sans selection:bg-neonPink selection:text-white">
 
-    <!-- Верхня стрічка трендів (як на картинці) -->
+    <!-- Верхня стрічка трендів -->
     <div class="bg-black/60 border-b border-purple-900/50 overflow-hidden whitespace-nowrap py-2 text-xs font-bold text-gray-300">
         <div class="inline-flex gap-6 animate-marquee px-4">
             <span class="flex items-center gap-1 text-neonPink"><i class="fa-solid fa-fire"></i> TRENDING CHAOS</span>
+            <span><span class="text-neonYellow">⭐</span> ОСТАННІЙ ТРЕНД! Сонячні протилежності</span>
             <span><span class="text-neonYellow">⭐</span> ОСТАННІЙ ТРЕНД! Рік та Морті</span>
             <span><span class="text-neonYellow">⭐</span> ОСТАННІЙ ТРЕНД! Gravity Falls</span>
             <span><span class="text-neonYellow">⭐</span> ОСТАННІЙ ТРЕНД! BoJack Horseman</span>
-            <span><span class="text-neonYellow">⭐</span> ОСТАННІЙ ТРЕНД! South Park</span>
         </div>
     </div>
 
@@ -70,7 +70,7 @@
     <!-- Основний вміст -->
     <main class="max-w-7xl mx-auto px-4 py-6 flex-1 w-full grid grid-cols-1 lg:grid-cols-4 gap-6">
         
-        <!-- Ліва/Головна частина з картками ( займає 3 колонки ) -->
+        <!-- Ліва/Головна частина з картками (займає 3 колонки) -->
         <div class="lg:col-span-3 space-y-8">
             
             <!-- Банер -->
@@ -93,7 +93,21 @@
                         </span>
                         <div class="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black via-black/60 to-transparent p-4">
                             <h4 class="font-impact text-xl text-white group-hover:text-neonGreen transition">Рік та Морті</h4>
-                            <p class="text-xs text-gray-300 mt-0.5">Сезоны 1-7 • Усі серії</p>
+                            <p class="text-xs text-gray-300 mt-0.5">Сезони 1-7 • Усі серії</p>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- Сонячні протилежності -->
+                <a href="solar-opposites.html" class="bg-cardBg rounded-3xl overflow-hidden shadow-2xl hover:scale-105 transition duration-300 flex flex-col cursor-pointer border-2 border-neonPink/40 hover:border-neonPink group relative">
+                    <div class="relative aspect-[3/4] overflow-hidden bg-gray-900">
+                        <img src="https://static.hdrezka.ac/i/2020/5/15/s514757c2bc39rd34s98v.png" alt="Сонячні протилежності" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                        <span class="absolute top-3 right-3 bg-black/80 backdrop-blur-md text-neonYellow text-xs px-2.5 py-1.5 rounded-xl font-black border border-yellow-500/30 flex items-center gap-1 shadow-lg">
+                            <i class="fa-solid fa-star"></i> 8.4
+                        </span>
+                        <div class="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black via-black/60 to-transparent p-4">
+                            <h4 class="font-impact text-xl text-white group-hover:text-neonPink transition">Сонячні протилежності</h4>
+                            <p class="text-xs text-gray-300 mt-0.5">Сезони 1-5 • Усі серії</p>
                         </div>
                     </div>
                 </a>
@@ -155,7 +169,7 @@
 
         </div>
 
-        <!-- Права колонка: Міні-чат фанатів (як на малюнку) -->
+        <!-- Права колонка: Міні-чат фанатів -->
         <div class="lg:col-span-1">
             <div class="bg-cardBg rounded-3xl border border-purple-900/50 p-4 shadow-2xl sticky top-24 flex flex-col h-[520px]">
                 <div class="flex items-center justify-between border-b border-purple-900/40 pb-3 mb-3">
