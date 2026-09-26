@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="uk" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Рік та Морті дивитися онлайн українською — MultFan UA</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        darkBg: '#0b0f19',
+                        cardBg: '#131b2e',
+                        neonGreen: '#00ff66',
+                        neonPink: '#ff007f',
+                        neonYellow: '#ffcc00',
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@800;900&display=swap');
+        .font-impact { font-family: 'Montserrat', sans-serif; }
+    </style>
+</head>
+<body class="bg-darkBg text-gray-100 min-h-screen flex flex-col font-sans">
+
+    <!-- Шапка -->
+    <header class="bg-cardBg/90 backdrop-blur border-b border-gray-800 sticky top-0 z-50 shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
+            <a href="index.html" class="text-xl font-impact tracking-wider text-white flex items-center gap-2">
+                <i class="fa-solid fa-arrow-left text-neonGreen"></i> На головну
+            </a>
+            <span class="text-neonPink font-impact">MultFan UA</span>
+        </div>
+    </header>
+
+    <!-- Основний вміст сторінки серіалу -->
+    <main class="max-w-5xl mx-auto px-4 py-8 flex-1 w-full">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <!-- Постер та інфо -->
+            <div class="space-y-4">
+                <img src="https://image.tmdb.org/t/p/w500/cvhNj9eoRBe5SxjCbQTkh05UP5N.jpg" alt="Рік та Морті" class="w-full rounded-2xl shadow-2xl border border-gray-800">
+                <div class="bg-cardBg p-4 rounded-2xl border border-gray-800 space-y-2 text-sm">
+                    <p><span class="text-gray-400">Рейтинг:</span> <strong class="text-neonYellow">9.0 ⭐</strong></p>
+                    <p><span class="text-gray-400">Роки:</span> <strong>2013 - 2026</strong></p>
+                    <p><span class="text-gray-400">Жанр:</span> <strong>Фантастика, Комедія, Пригоди</strong></p>
+                </div>
+            </div>
+
+            <!-- Плеєр та вибір сезонів -->
+            <div class="md:col-span-2 space-y-6">
+                <div>
+                    <h1 class="text-3xl font-impact font-black text-white">Рік та Морті</h1>
+                    <p class="text-gray-400 text-sm mt-2 leading-relaxed">
+                        Божевільний вчений-алкоголік Рік та його онук Морті подорожують паралельними вимірами, космосом та іншими світами, творячи абсолютний хаос.
+                    </p>
+                </div>
+
+                <!-- Вибір сезону / серії (інтерактивні кнопки) -->
+                <div class="bg-cardBg p-4 rounded-2xl border border-gray-800">
+                    <h3 class="text-sm font-bold text-gray-300 mb-3"><i class="fa-solid fa-layer-group text-neonGreen"></i> Оберіть сезон:</h3>
+                    <div class="flex gap-2 flex-wrap">
+                        <button onclick="changeSeason(1)" class="season-btn px-4 py-2 bg-neonGreen text-black font-bold rounded-xl text-sm transition">Сезон 1</button>
+                        <button onclick="changeSeason(2)" class="season-btn px-4 py-2 bg-darkBg border border-gray-700 text-white font-bold rounded-xl text-sm transition hover:border-neonGreen">Сезон 2</button>
+                        <button onclick="changeSeason(3)" class="season-btn px-4 py-2 bg-darkBg border border-gray-700 text-white font-bold rounded-xl text-sm transition hover:border-neonGreen">Сезон 7</button>
+                    </div>
+                </div>
+
+                <!-- Відео плеєр -->
+                <div class="relative w-full aspect-video bg-black rounded-2xl overflow-hidden border border-gray-800 shadow-2xl">
+                    <iframe id="videoPlayer" class="w-full h-full" src="https://www.youtube.com/embed/xE0Krr2gE0g" frameborder="0" allowfullscreen></iframe>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-cardBg border-t border-gray-800 text-center py-6 text-gray-400 text-sm mt-12">
+        <p>MultFan UA — Тобі буде весело! 👽🔥</p>
+    </footer>
+
+    <script>
+        // Зміна відео залежно від обраного сезону (можна підставити свої посилання)
+        function changeSeason(seasonNum) {
+            const player = document.getElementById('videoPlayer');
+            if (seasonNum === 1) {
+                player.src = "https://www.youtube.com/embed/xE0Krr2gE0g";
+            } else if (seasonNum === 2) {
+                player.src = "https://www.youtube.com/embed/CmSKJcaYsng";
+            } else if (seasonNum === 3) {
+                player.src = "https://www.youtube.com/embed/KQ9AgAH0Pxo";
+            }
+        }
+    </script>
+</body>
+</html>
