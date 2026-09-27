@@ -31,26 +31,15 @@
         .neon-glow-pink { text-shadow: 0 0 10px #ff007f, 0 0 20px #ff007f; }
         .neon-glow-green { text-shadow: 0 0 10px #00ff66, 0 0 20px #00ff66; }
         
-        /* Текстура фону з ухилом в поп-арт / стікери */
+        /* Психоделічний фон із затемненням для читабельності */
         body {
-            background-color: #0b051d;
-            background-image: radial-gradient(circle at 20% 30%, rgba(157, 0, 255, 0.15) 0%, transparent 40%),
-                            radial-gradient(circle at 80% 70%, rgba(255, 0, 127, 0.15) 0%, transparent 40%);
+            background: linear-gradient(rgba(11, 5, 29, 0.75), rgba(11, 5, 29, 0.85)), 
+                        url('508e26dc-36a8-4ed5-88f9-52788eb6be3f.jfif') no-repeat center center fixed;
+            background-size: cover;
         }
     </style>
 </head>
 <body class="bg-darkBg text-gray-100 min-h-screen flex flex-col font-sans selection:bg-neonPink selection:text-white">
-
-    <!-- Верхня стрічка трендів -->
-    <div class="bg-black/60 border-b border-purple-900/50 overflow-hidden whitespace-nowrap py-2 text-xs font-bold text-gray-300">
-        <div class="inline-flex gap-6 animate-marquee px-4">
-            <span class="flex items-center gap-1 text-neonPink"><i class="fa-solid fa-fire"></i> TRENDING CHAOS</span>
-            <span><span class="text-neonYellow">⭐</span> ОСТАННІЙ ТРЕНД! Сонячні протилежності</span>
-            <span><span class="text-neonYellow">⭐</span> ОСТАННІЙ ТРЕНД! Рік та Морті</span>
-            <span><span class="text-neonYellow">⭐</span> ОСТАННІЙ ТРЕНД! Gravity Falls</span>
-            <span><span class="text-neonYellow">⭐</span> ОСТАННІЙ ТРЕНД! BoJack Horseman</span>
-        </div>
-    </div>
 
     <!-- Шапка сайту з божевільним логотипом -->
     <header class="bg-cardBg/80 backdrop-blur-md border-b border-purple-900/40 sticky top-0 z-50 shadow-2xl">
@@ -60,7 +49,7 @@
             </a>
             <div class="relative flex items-center gap-4">
                 <div class="relative hidden sm:block">
-                    <input type="text" id="searchInput" placeholder="Шукати суєту..." onkeyup="filterMovies()" class="bg-darkBg border border-purple-700/50 rounded-full px-4 py-2 text-sm text-white focus:outline-none focus:border-neonGreen w-64 shadow-inner">
+                    <input type="text" id="searchInput" placeholder="Шукати мультсеріал..." onkeyup="filterMovies()" class="bg-darkBg border border-purple-700/50 rounded-full px-4 py-2 text-sm text-white focus:outline-none focus:border-neonGreen w-64 shadow-inner">
                     <i class="fa-solid fa-search absolute right-4 top-3 text-neonPink text-sm"></i>
                 </div>
             </div>
@@ -68,157 +57,87 @@
     </header>
 
     <!-- Основний вміст -->
-    <main class="max-w-7xl mx-auto px-4 py-6 flex-1 w-full grid grid-cols-1 lg:grid-cols-4 gap-6">
+    <main class="max-w-7xl mx-auto px-4 py-8 flex-1 w-full space-y-8">
         
-        <!-- Ліва/Головна частина з картками (займає 3 колонки) -->
-        <div class="lg:col-span-3 space-y-8">
-            
-            <!-- Банер -->
-            <div class="relative p-6 rounded-3xl bg-gradient-to-r from-purple-900/60 via-pink-900/40 to-green-900/50 border border-purple-700/40 shadow-2xl overflow-hidden">
-                <div class="absolute -right-10 -bottom-10 opacity-25 text-9xl">👽</div>
-                <span class="bg-neonPink text-black text-xs font-black px-3 py-1 rounded-full uppercase tracking-widest shadow-lg">⚡️ ТОП ПОРТАЛИ</span>
-                <h1 class="text-3xl sm:text-5xl font-impact font-black text-white mt-3 drop-shadow-md">ВИБЕРИ СВІЙ ПОРТАЛ</h1>
-                <p class="text-gray-300 text-sm mt-2 max-w-xl">Дивись улюблені анімаційні серіали з найкращим українським озвученням та повним відривом!</p>
-            </div>
-
-            <!-- Велика сітка карток (Головні серіали) -->
-            <div id="moviesGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-                
-                <!-- Рік та Морті -->
-                <a href="rick-and-morty.html" class="bg-cardBg rounded-3xl overflow-hidden shadow-2xl hover:scale-105 transition duration-300 flex flex-col cursor-pointer border-2 border-neonGreen/40 hover:border-neonGreen group relative">
-                    <div class="relative aspect-[3/4] overflow-hidden bg-gray-900">
-                        <img src="https://simpsonsua.tv/photos/poster/RickAndMorty.jpg" alt="Рік та Морті" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
-                        <span class="absolute top-3 right-3 bg-black/80 backdrop-blur-md text-neonYellow text-xs px-2.5 py-1.5 rounded-xl font-black border border-yellow-500/30 flex items-center gap-1 shadow-lg">
-                            <i class="fa-solid fa-star"></i> 9.0
-                        </span>
-                        <div class="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black via-black/60 to-transparent p-4">
-                            <h4 class="font-impact text-xl text-white group-hover:text-neonGreen transition">Рік та Морті</h4>
-                            <p class="text-xs text-gray-300 mt-0.5">Сезони 1-7 • Усі серії</p>
-                        </div>
-                    </div>
-                </a>
-
-                <!-- Сонячні протилежності -->
-                <a href="solar-opposites.html" class="bg-cardBg rounded-3xl overflow-hidden shadow-2xl hover:scale-105 transition duration-300 flex flex-col cursor-pointer border-2 border-neonPink/40 hover:border-neonPink group relative">
-                    <div class="relative aspect-[3/4] overflow-hidden bg-gray-900">
-                        <img src="https://simpsonsua.tv/photos/poster/SolarOpposites.jpg" alt="Сонячні протилежності" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
-                        <span class="absolute top-3 right-3 bg-black/80 backdrop-blur-md text-neonYellow text-xs px-2.5 py-1.5 rounded-xl font-black border border-yellow-500/30 flex items-center gap-1 shadow-lg">
-                            <i class="fa-solid fa-star"></i> 8.4
-                        </span>
-                        <div class="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black via-black/60 to-transparent p-4">
-                            <h4 class="font-impact text-xl text-white group-hover:text-neonPink transition">Сонячні протилежності</h4>
-                            <p class="text-xs text-gray-300 mt-0.5">Сезони 1-5 • Усі серії</p>
-                        </div>
-                    </div>
-                </a>
-
-                <!-- Gravity Falls (Оновлено постер та додано посилання) -->
-                <a href="gravity-falls.html" class="bg-cardBg rounded-3xl overflow-hidden shadow-2xl hover:scale-105 transition duration-300 flex flex-col cursor-pointer border-2 border-purple-500/40 hover:border-neonPurple group relative">
-                    <div class="relative aspect-[3/4] overflow-hidden bg-gray-900">
-                        <img src="https://content1.rozetka.com.ua/goods/images/big/25703838.jpg" alt="Gravity Falls" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
-                        <span class="absolute top-3 right-3 bg-black/80 backdrop-blur-md text-neonYellow text-xs px-2.5 py-1.5 rounded-xl font-black border border-yellow-500/30 flex items-center gap-1 shadow-lg">
-                            <i class="fa-solid fa-star"></i> 9.2
-                        </span>
-                        <div class="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black via-black/60 to-transparent p-4">
-                            <h4 class="font-impact text-xl text-white group-hover:text-neonPurple transition">Gravity Falls</h4>
-                            <p class="text-xs text-gray-300 mt-0.5">Сезони 1-2 • Усі серії</p>
-                        </div>
-                    </div>
-                </a>
-
-                <!-- BoJack Horseman -->
-                <a href="bojack-horseman.html" class="bg-cardBg rounded-3xl overflow-hidden shadow-2xl hover:scale-105 transition duration-300 flex flex-col cursor-pointer border-2 border-pink-500/40 hover:border-neonYellow group relative">
-                    <div class="relative aspect-[3/4] overflow-hidden bg-gray-900">
-                        <img src="https://friends.in.ua/photos/films/kin-bodzhek.jpg" alt="BoJack Horseman" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
-                        <span class="absolute top-3 right-3 bg-black/80 backdrop-blur-md text-neonYellow text-xs px-2.5 py-1.5 rounded-xl font-black border border-yellow-500/30 flex items-center gap-1 shadow-lg">
-                            <i class="fa-solid fa-star"></i> 8.7
-                        </span>
-                        <div class="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black via-black/60 to-transparent p-4">
-                            <h4 class="font-impact text-xl text-white group-hover:text-neonYellow transition">BoJack Horseman</h4>
-                            <p class="text-xs text-gray-300 mt-0.5">Сезони 1-6 • Усі серії</p>
-                        </div>
-                    </div>
-                </a>
-
-            </div>
-
-            <!-- Додаткова секція: Мем дня & Аніме суєта -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4">
-                <div class="bg-cardBg p-5 rounded-3xl border border-purple-900/50 shadow-xl flex flex-col justify-between">
-                    <div>
-                        <span class="bg-neonGreen text-black font-black text-xs px-2.5 py-1 rounded-lg uppercase">🔥 МЕМ ДНЯ</span>
-                        <h3 class="font-impact text-xl text-white mt-3">ПОРТАЛ В ПЕКЛО (СПЕЦВИПУСК)</h3>
-                        <p class="text-xs text-gray-400 mt-1">Найбожевільніші моменти з найсвіжіших епізодів.</p>
-                    </div>
-                    <div class="mt-4 aspect-video rounded-2xl bg-black/50 overflow-hidden border border-purple-900/30 flex items-center justify-center">
-                        <i class="fa-solid fa-play text-3xl text-neonPink"></i>
-                    </div>
-                </div>
-
-                <div class="bg-cardBg p-5 rounded-3xl border border-purple-900/50 shadow-xl flex flex-col justify-between">
-                    <div>
-                        <span class="bg-neonPink text-white font-black text-xs px-2.5 py-1 rounded-lg uppercase">⚡️ АНІМЕ СУЄТА</span>
-                        <h3 class="font-impact text-xl text-white mt-3">КІБЕРПАНК ТА ІНШІ</h3>
-                        <p class="text-xs text-gray-400 mt-1">Дивись у найкращій озвучці без цензури.</p>
-                    </div>
-                    <div class="mt-4 aspect-video rounded-2xl bg-black/50 overflow-hidden border border-purple-900/30 flex items-center justify-center">
-                        <i class="fa-solid fa-play text-3xl text-neonGreen"></i>
-                    </div>
-                </div>
-            </div>
-
+        <!-- Банер -->
+        <div class="relative p-6 sm:p-8 rounded-3xl bg-gradient-to-r from-purple-900/60 via-pink-900/40 to-green-900/50 border border-purple-700/40 shadow-2xl overflow-hidden backdrop-blur-sm">
+            <div class="absolute -right-10 -bottom-10 opacity-25 text-9xl">👽</div>
+            <span class="bg-neonPink text-black text-xs font-black px-3 py-1 rounded-full uppercase tracking-widest shadow-lg">⚡️ ТОП ПОРТАЛИ</span>
+            <h1 class="text-3xl sm:text-5xl font-impact font-black text-white mt-3 drop-shadow-md">ВИБЕРИ СВІЙ ПОРТАЛ</h1>
+            <p class="text-gray-300 text-sm sm:text-base mt-2 max-w-xl">Дивись улюблені анімаційні серіали з найкращим українським озвученням та повним відривом!</p>
         </div>
 
-        <!-- Права колонка: Міні-чат фанатів -->
-        <div class="lg:col-span-1">
-            <div class="bg-cardBg rounded-3xl border border-purple-900/50 p-4 shadow-2xl sticky top-24 flex flex-col h-[520px]">
-                <div class="flex items-center justify-between border-b border-purple-900/40 pb-3 mb-3">
-                    <h3 class="font-impact text-sm text-white flex items-center gap-2">
-                        <i class="fa-solid fa-comments text-neonGreen"></i> СУЄТНИЙ ЧАТ
-                    </h3>
-                    <span class="w-2.5 h-2.5 rounded-full bg-neonGreen animate-pulse"></span>
+        <!-- Велика сітка карток (Головні серіали) -->
+        <div id="moviesGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            
+            <!-- Рік та Морті -->
+            <a href="rick-and-morty.html" class="bg-cardBg/90 backdrop-blur-sm rounded-3xl overflow-hidden shadow-2xl hover:scale-105 transition duration-300 flex flex-col cursor-pointer border-2 border-neonGreen/40 hover:border-neonGreen group relative">
+                <div class="relative aspect-[3/4] overflow-hidden bg-gray-900">
+                    <img src="https://simpsonsua.tv/photos/poster/RickAndMorty.jpg" alt="Рік та Морті" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                    <span class="absolute top-3 right-3 bg-black/80 backdrop-blur-md text-neonYellow text-xs px-2.5 py-1.5 rounded-xl font-black border border-yellow-500/30 flex items-center gap-1 shadow-lg">
+                        <i class="fa-solid fa-star"></i> 9.0
+                    </span>
+                    <div class="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black via-black/60 to-transparent p-4">
+                        <h4 class="font-impact text-xl text-white group-hover:text-neonGreen transition">Рік та Морті</h4>
+                        <p class="text-xs text-gray-300 mt-0.5">Сезони 1-7 • Усі серії</p>
+                    </div>
                 </div>
+            </a>
 
-                <!-- Повідомлення чату -->
-                <div class="flex-1 overflow-y-auto space-y-3 pr-1 text-xs">
-                    <div class="bg-darkBg/60 p-2.5 rounded-2xl border border-purple-900/30">
-                        <span class="text-neonPink font-bold">AndriyUA:</span>
-                        <p class="text-gray-300 mt-0.5">ЧЕКАЮ НА 7 СЕЗОН! 🔥</p>
-                    </div>
-                    <div class="bg-darkBg/60 p-2.5 rounded-2xl border border-purple-900/30">
-                        <span class="text-neonYellow font-bold">MortyFan:</span>
-                        <p class="text-gray-300 mt-0.5">Рік сьогодні відпалив конкретно 😂</p>
-                    </div>
-                    <div class="bg-darkBg/60 p-2.5 rounded-2xl border border-purple-900/30">
-                        <span class="text-neonGreen font-bold">AnimeBoy:</span>
-                        <p class="text-gray-300 mt-0.5">Хто дивився нову серію?</p>
-                    </div>
-                    <div class="bg-darkBg/60 p-2.5 rounded-2xl border border-purple-900/30">
-                        <span class="text-neonPink font-bold">Svitlana:</span>
-                        <p class="text-gray-300 mt-0.5">Бібер паблік топчик!</p>
+            <!-- Сонячні протилежності -->
+            <a href="solar-opposites.html" class="bg-cardBg/90 backdrop-blur-sm rounded-3xl overflow-hidden shadow-2xl hover:scale-105 transition duration-300 flex flex-col cursor-pointer border-2 border-neonPink/40 hover:border-neonPink group relative">
+                <div class="relative aspect-[3/4] overflow-hidden bg-gray-900">
+                    <img src="https://simpsonsua.tv/photos/poster/SolarOpposites.jpg" alt="Сонячні протилежності" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                    <span class="absolute top-3 right-3 bg-black/80 backdrop-blur-md text-neonYellow text-xs px-2.5 py-1.5 rounded-xl font-black border border-yellow-500/30 flex items-center gap-1 shadow-lg">
+                        <i class="fa-solid fa-star"></i> 8.4
+                    </span>
+                    <div class="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black via-black/60 to-transparent p-4">
+                        <h4 class="font-impact text-xl text-white group-hover:text-neonPink transition">Сонячні протилежності</h4>
+                        <p class="text-xs text-gray-300 mt-0.5">Сезони 1-5 • Усі серії</p>
                     </div>
                 </div>
+            </a>
 
-                <!-- Поле введення повідомлення -->
-                <div class="mt-3 pt-2 border-t border-purple-900/40 flex gap-2">
-                    <input type="text" placeholder="Напиши щось..." class="bg-darkBg border border-purple-900/50 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-neonGreen flex-1">
-                    <button class="bg-neonPink text-black font-black px-3 py-2 rounded-xl text-xs hover:bg-pink-500 transition shadow-lg">
-                        <i class="fa-solid fa-paper-plane"></i>
-                    </button>
+            <!-- Gravity Falls -->
+            <a href="gravity-falls.html" class="bg-cardBg/90 backdrop-blur-sm rounded-3xl overflow-hidden shadow-2xl hover:scale-105 transition duration-300 flex flex-col cursor-pointer border-2 border-purple-500/40 hover:border-neonPurple group relative">
+                <div class="relative aspect-[3/4] overflow-hidden bg-gray-900">
+                    <img src="https://content1.rozetka.com.ua/goods/images/big/25703838.jpg" alt="Gravity Falls" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                    <span class="absolute top-3 right-3 bg-black/80 backdrop-blur-md text-neonYellow text-xs px-2.5 py-1.5 rounded-xl font-black border border-yellow-500/30 flex items-center gap-1 shadow-lg">
+                        <i class="fa-solid fa-star"></i> 9.2
+                    </span>
+                    <div class="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black via-black/60 to-transparent p-4">
+                        <h4 class="font-impact text-xl text-white group-hover:text-neonPurple transition">Gravity Falls</h4>
+                        <p class="text-xs text-gray-300 mt-0.5">Сезони 1-2 • Усі серії</p>
+                    </div>
                 </div>
-            </div>
+            </a>
+
+            <!-- BoJack Horseman -->
+            <a href="bojack-horseman.html" class="bg-cardBg/90 backdrop-blur-sm rounded-3xl overflow-hidden shadow-2xl hover:scale-105 transition duration-300 flex flex-col cursor-pointer border-2 border-pink-500/40 hover:border-neonYellow group relative">
+                <div class="relative aspect-[3/4] overflow-hidden bg-gray-900">
+                    <img src="https://friends.in.ua/photos/films/kin-bodzhek.jpg" alt="BoJack Horseman" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                    <span class="absolute top-3 right-3 bg-black/80 backdrop-blur-md text-neonYellow text-xs px-2.5 py-1.5 rounded-xl font-black border border-yellow-500/30 flex items-center gap-1 shadow-lg">
+                        <i class="fa-solid fa-star"></i> 8.7
+                    </span>
+                    <div class="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black via-black/60 to-transparent p-4">
+                        <h4 class="font-impact text-xl text-white group-hover:text-neonYellow transition">BoJack Horseman</h4>
+                        <p class="text-xs text-gray-300 mt-0.5">Сезони 1-6 • Усі серії</p>
+                    </div>
+                </div>
+            </a>
+
         </div>
 
     </main>
 
-    <footer class="bg-cardBg border-t border-purple-900/40 text-center py-6 text-gray-400 text-sm mt-12">
+    <footer class="bg-cardBg/95 backdrop-blur-md border-t border-purple-900/40 text-center py-6 text-gray-400 text-sm mt-12">
         <p>MultFan UA — Тобі буде весело! 👽🔥 Усі права захищено.</p>
     </footer>
 
     <script>
         function filterMovies() {
             const query = document.getElementById('searchInput').value.toLowerCase();
-            const cards = document.querySelectorAll('#moviesGrid > div, #moviesGrid > a');
+            const cards = document.querySelectorAll('#moviesGrid > a');
             cards.forEach(card => {
                 const title = card.querySelector('h4').textContent.toLowerCase();
                 card.style.display = title.includes(query) ? "flex" : "none";
