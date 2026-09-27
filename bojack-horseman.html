@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="uk" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Кінь БоДжек дивитися онлайн українською — MultFan UA</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        darkBg: '#0b0f19',
+                        cardBg: '#131b2e',
+                        neonGreen: '#00ff66',
+                        neonPink: '#ff007f',
+                        neonYellow: '#ffcc00',
+                        neonPurple: '#9d00ff',
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Підключення іконок FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@800;900&display=swap');
+        .font-impact { font-family: 'Montserrat', sans-serif; }
+
+        body {
+            background-color: #0f1117;
+            background-image: linear-gradient(to bottom, rgba(15, 17, 23, 0.85), rgba(15, 17, 23, 0.95)), 
+                              url('https://image.tmdb.org/t/p/original/pBxyiNaPRkdpCLJj6t23A7kK84x.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+    </style>
+</head>
+<body class="bg-darkBg text-gray-100 min-h-screen flex flex-col font-sans">
+
+    <!-- Шапка -->
+    <header class="bg-cardBg/90 backdrop-blur border-b border-gray-800 sticky top-0 z-50 shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
+            <a href="index.html" class="text-xl font-impact tracking-wider text-white flex items-center gap-2 hover:text-neonPink transition">
+                <i class="fa-solid fa-arrow-left text-neonYellow"></i> На головну
+            </a>
+            <span class="text-neonPink font-impact text-lg">MultFan UA</span>
+        </div>
+    </header>
+
+    <!-- Основний вміст сторінки серіалу -->
+    <main class="max-w-5xl mx-auto px-4 py-8 flex-1 w-full">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            
+            <!-- Постер та інформація -->
+            <div class="space-y-4">
+                <img src="https://image.tmdb.org/t/p/w500/pBxyiNaPRkdpCLJj6t23A7kK84x.jpg" alt="Кінь БоДжек" class="w-full rounded-2xl shadow-2xl border border-gray-800 object-cover">
+                <div class="bg-cardBg/90 backdrop-blur p-4 rounded-2xl border border-gray-800 space-y-2 text-sm shadow-xl">
+                    <p><span class="text-gray-400">Рейтинг:</span> <strong class="text-neonYellow">8.7 ⭐</strong></p>
+                    <p><span class="text-gray-400">Роки:</span> <strong>2014 - 2020</strong></p>
+                    <p><span class="text-gray-400">Жанр:</span> <strong>Драмеді, Комедія, Анімація</strong></p>
+                </div>
+            </div>
+
+            <!-- Плеєр, вибір сезонів та серій -->
+            <div class="md:col-span-2 space-y-6">
+                <div>
+                    <h1 class="text-3xl font-impact font-black text-white drop-shadow-md">Кінь БоДжек</h1>
+                    <p class="text-gray-300 text-sm mt-2 leading-relaxed">
+                        Історія згаслої зірки ситкому 90-х — антропоморфного коня БоДжека, який намагається знайти сенс життя через самоіронію, алкоголь та непрості стосунки з оточенням.
+                    </p>
+                </div>
+
+                <!-- Вибір сезону (Кнопки зверху) -->
+                <div class="bg-cardBg/90 backdrop-blur p-4 rounded-2xl border border-gray-800 shadow-xl">
+                    <h3 class="text-sm font-bold text-gray-300 mb-3"><i class="fa-solid fa-layer-group text-neonYellow"></i> Оберіть сезон:</h3>
+                    <div class="flex gap-2 flex-wrap" id="seasonsContainer">
+                        <button onclick="selectSeason(1)" id="seasonBtn1" class="px-4 py-2 bg-neonYellow text-black font-bold rounded-xl text-sm transition">Сезон 1</button>
+                        <button onclick="selectSeason(2)" id="seasonBtn2" class="px-4 py-2 bg-darkBg border border-gray-700 text-white font-bold rounded-xl text-sm transition hover:border-neonYellow">Сезон 2</button>
+                        <button onclick="selectSeason(3)" id="seasonBtn3" class="px-4 py-2 bg-darkBg border border-gray-700 text-white font-bold rounded-xl text-sm transition hover:border-neonYellow">Сезон 3</button>
+                        <button onclick="selectSeason(4)" id="seasonBtn4" class="px-4 py-2 bg-darkBg border border-gray-700 text-white font-bold rounded-xl text-sm transition hover:border-neonYellow">Сезон 4</button>
+                        <button onclick="selectSeason(5)" id="seasonBtn5" class="px-4 py-2 bg-darkBg border border-gray-700 text-white font-bold rounded-xl text-sm transition hover:border-neonYellow">Сезон 5</button>
+                        <button onclick="selectSeason(6)" id="seasonBtn6" class="px-4 py-2 bg-darkBg border border-gray-700 text-white font-bold rounded-xl text-sm transition hover:border-neonYellow">Сезон 6</button>
+                    </div>
+                </div>
+
+                <!-- Відео плеєр -->
+                <div class="relative w-full aspect-video bg-black rounded-2xl overflow-hidden border border-gray-800 shadow-2xl">
+                    <video id="videoPlayer" class="w-full h-full" controls>
+                        <source id="videoSource" src="" type="video/mp4">
+                        Ваш браузер не підтримує відео.
+                    </video>
+                </div>
+
+                <!-- Вибір серії -->
+                <div class="bg-cardBg/90 backdrop-blur p-4 rounded-2xl border border-gray-800 shadow-xl">
+                    <h3 class="text-sm font-bold text-gray-300 mb-3"><i class="fa-solid fa-play text-neonPink"></i> Оберіть серію (<span id="currentSeasonLabel">Сезон 1</span>):</h3>
+                    <div class="flex gap-2 flex-wrap" id="episodesContainer">
+                        <!-- Кнопки серій генеруються через скрипт -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-cardBg/90 backdrop-blur border-t border-gray-800 text-center py-6 text-gray-400 text-sm mt-12 shadow-inner">
+        <p>MultFan UA — Тобі буде весело! 👽🔥</p>
+    </footer>
+
+    <script>
+        let currentSeason = 1;
+        let currentEpisode = 1;
+
+        // Повна база посилань на відео для Кінь БоДжек (вставляйте посилання замість порожніх лапок "")
+        const videoDatabase = {
+            1: {
+                1: "", 2: "", 3: "", 4: "", 5: "", 6: "", 7: "", 8: "", 9: "", 10: "", 11: "", 12: ""
+            },
+            2: {
+                1: "", 2: "", 3: "", 4: "", 5: "", 6: "", 7: "", 8: "", 9: "", 10: "", 11: "", 12: ""
+            },
+            3: {
+                1: "", 2: "", 3: "", 4: "", 5: "", 6: "", 7: "", 8: "", 9: "", 10: "", 11: "", 12: ""
+            },
+            4: {
+                1: "", 2: "", 3: "", 4: "", 5: "", 6: "", 7: "", 8: "", 9: "", 10: "", 11: "", 12: ""
+            },
+            5: {
+                1: "", 2: "", 3: "", 4: "", 5: "", 6: "", 7: "", 8: "", 9: "", 10: "", 11: "", 12: ""
+            },
+            6: {
+                1: "", 2: "", 3: "", 4: "", 5: "", 6: "", 7: "", 8: "", 9: "", 10: "", 11: "", 12: "", 13: "", 14: "", 15: "", 16: ""
+            }
+        };
+
+        // Кількість серій у кожному сезоні
+        function getEpisodesCount(seasonNum) {
+            switch(seasonNum) {
+                case 1: return 12;
+                case 2: return 12;
+                case 3: return 12;
+                case 4: return 12;
+                case 5: return 12;
+                case 6: return 16;
+                default: return 12;
+            }
+        }
+
+        function selectSeason(seasonNum) {
+            currentSeason = seasonNum;
+            
+            for (let i = 1; i <= 6; i++) {
+                const btn = document.getElementById(`seasonBtn${i}`);
+                if (btn) {
+                    if (i === seasonNum) {
+                        btn.className = "px-4 py-2 bg-neonYellow text-black font-bold rounded-xl text-sm transition shadow-lg shadow-neonYellow/20";
+                    } else {
+                        btn.className = "px-4 py-2 bg-darkBg border border-gray-700 text-white font-bold rounded-xl text-sm transition hover:border-neonYellow";
+                    }
+                }
+            }
+
+            document.getElementById('currentSeasonLabel').innerText = `Сезон ${seasonNum}`;
+            generateEpisodes(seasonNum);
+        }
+
+        function generateEpisodes(seasonNum) {
+            const container = document.getElementById('episodesContainer');
+            container.innerHTML = '';
+            
+            const episodesCount = getEpisodesCount(seasonNum);
+
+            for (let ep = 1; ep <= episodesCount; ep++) {
+                const btn = document.createElement('button');
+                btn.innerText = `Серія ${ep}`;
+                btn.id = `epBtn${ep}`;
+                btn.className = (ep === currentEpisode && seasonNum === currentSeason)
+                    ? "px-3 py-1.5 bg-neonPink text-white font-bold rounded-lg text-xs transition shadow-md shadow-neonPink/30"
+                    : "px-3 py-1.5 bg-darkBg border border-gray-700 text-white font-bold rounded-lg text-xs transition hover:border-neonPink";
+                
+                btn.onclick = () => selectEpisode(seasonNum, ep);
+                container.appendChild(btn);
+            }
+
+            selectEpisode(seasonNum, 1);
+        }
+
+        function selectEpisode(seasonNum, episodeNum) {
+            currentSeason = seasonNum;
+            currentEpisode = episodeNum;
+
+            const episodesCount = getEpisodesCount(seasonNum);
+            for (let i = 1; i <= episodesCount; i++) {
+                const btn = document.getElementById(`epBtn${i}`);
+                if (btn) {
+                    if (i === episodeNum) {
+                        btn.className = "px-3 py-1.5 bg-neonPink text-white font-bold rounded-lg text-xs transition shadow-md shadow-neonPink/30";
+                    } else {
+                        btn.className = "px-3 py-1.5 bg-darkBg border border-gray-700 text-white font-bold rounded-lg text-xs transition hover:border-neonPink";
+                    }
+                }
+            }
+
+            const player = document.getElementById('videoPlayer');
+            const source = document.getElementById('videoSource');
+            
+            if (videoDatabase[seasonNum] && videoDatabase[seasonNum][episodeNum]) {
+                source.src = videoDatabase[seasonNum][episodeNum];
+            } else {
+                source.src = "https://cdn77.aj2204.online/files2204/templates/149/134/blank.mp4?cs=0158bde3b1ed466af29359bc3dbf5e34"; 
+            }
+            
+            player.load();
+        }
+
+        window.onload = () => {
+            selectSeason(1);
+        };
+    </script>
+</body>
+</html>
