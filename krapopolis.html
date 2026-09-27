@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="uk" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Крапополіс дивитися онлайн українською — MultFan UA</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        darkBg: '#0b0f19',
+                        cardBg: '#131b2e',
+                        neonGreen: '#00ff66',
+                        neonPink: '#ff007f',
+                        neonYellow: '#ffcc00',
+                        neonAmber: '#f59e0b',
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Підключення іконок FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@800;900&display=swap');
+        .font-impact { font-family: 'Montserrat', sans-serif; }
+
+        body {
+            background-color: #0f1117;
+            background-image: linear-gradient(to bottom, rgba(15, 17, 23, 0.85), rgba(15, 17, 23, 0.95)), 
+                              url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSz1bpdQYosoG82Rj_c79rGbrmE4c22tvX43US5KYEPz0iSuCfakH9j8dg&s=10');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+    </style>
+</head>
+<body class="bg-darkBg text-gray-100 min-h-screen flex flex-col font-sans">
+
+    <!-- Шапка -->
+    <header class="bg-cardBg/90 backdrop-blur border-b border-gray-800 sticky top-0 z-50 shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
+            <a href="index.html" class="text-xl font-impact tracking-wider text-white flex items-center gap-2 hover:text-amber-400 transition">
+                <i class="fa-solid fa-arrow-left text-amber-400"></i> На головну
+            </a>
+            <span class="text-neonPink font-impact text-lg">MultFan UA</span>
+        </div>
+    </header>
+
+    <!-- Основний вміст сторінки серіалу -->
+    <main class="max-w-5xl mx-auto px-4 py-8 flex-1 w-full">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            
+            <!-- Постер та інформація -->
+            <div class="space-y-4">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSz1bpdQYosoG82Rj_c79rGbrmE4c22tvX43US5KYEPz0iSuCfakH9j8dg&s=10" alt="Крапополіс" class="w-full rounded-2xl shadow-2xl border border-gray-800 object-cover">
+                <div class="bg-cardBg/90 backdrop-blur p-4 rounded-2xl border border-gray-800 space-y-2 text-sm shadow-xl">
+                    <p><span class="text-gray-400">Рейтинг:</span> <strong class="text-neonYellow">7.5 ⭐</strong></p>
+                    <p><span class="text-gray-400">Роки:</span> <strong>2023 - 2026</strong></p>
+                    <p><span class="text-gray-400">Жанр:</span> <strong>Анімація, Комедія, Фентезі</strong></p>
+                </div>
+            </div>
+
+            <!-- Плеєр, вибір сезонів та серій -->
+            <div class="md:col-span-2 space-y-6">
+                <div>
+                    <h1 class="text-3xl font-impact font-black text-white drop-shadow-md">Крапополіс (Krapopolis)</h1>
+                    <p class="text-gray-300 text-sm mt-2 leading-relaxed">
+                        Дія анімаційного серіалу розгортається у міфічній стародавній Греції. Напівбоги, люди та дивні монстри намагаються налагодити життя у першому місті-державі у світі, хоча їхня дисфункціональна родина богів постійно намагається все зруйнувати.
+                    </p>
+                </div>
+
+                <!-- Вибір сезону (Кнопки зверху) -->
+                <div class="bg-cardBg/90 backdrop-blur p-4 rounded-2xl border border-gray-800 shadow-xl">
+                    <h3 class="text-sm font-bold text-gray-300 mb-3"><i class="fa-solid fa-layer-group text-amber-400"></i> Оберіть сезон:</h3>
+                    <div class="flex gap-2 flex-wrap" id="seasonsContainer">
+                        <button onclick="selectSeason(1)" id="seasonBtn1" class="px-4 py-2 bg-amber-500 text-black font-bold rounded-xl text-sm transition">Сезон 1</button>
+                        <button onclick="selectSeason(2)" id="seasonBtn2" class="px-4 py-2 bg-darkBg border border-gray-700 text-white font-bold rounded-xl text-sm transition hover:border-amber-400">Сезон 2</button>
+                    </div>
+                </div>
+
+                <!-- Відео плеєр -->
+                <div class="relative w-full aspect-video bg-black rounded-2xl overflow-hidden border border-gray-800 shadow-2xl">
+                    <video id="videoPlayer" class="w-full h-full" controls>
+                        <source id="videoSource" src="" type="video/mp4">
+                        Ваш браузер не підтримує відео.
+                    </video>
+                </div>
+
+                <!-- Вибір серії -->
+                <div class="bg-cardBg/90 backdrop-blur p-4 rounded-2xl border border-gray-800 shadow-xl">
+                    <h3 class="text-sm font-bold text-gray-300 mb-3"><i class="fa-solid fa-play text-neonPink"></i> Оберіть серію (<span id="currentSeasonLabel">Сезон 1</span>):</h3>
+                    <div class="flex gap-2 flex-wrap" id="episodesContainer">
+                        <!-- Кнопки серій генеруються через скрипт -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-cardBg/90 backdrop-blur border-t border-gray-800 text-center py-6 text-gray-400 text-sm mt-12 shadow-inner">
+        <p>MultFan UA — Тобі буде весело! 👽🔥</p>
+    </footer>
+
+    <script>
+        let currentSeason = 1;
+        let currentEpisode = 1;
+
+        // База посилань для «Крапополіса» (Krapopolis)
+        const videoDatabase = {
+            1: {
+                1: "https://s30.hdvbua.pro/media3/hls/serials/krapopolis.s01e01.ua.dub/hls/index.m3u8",
+                2: "https://s30.hdvbua.pro/media3/hls/serials/krapopolis.s01e02.ua.dub/hls/index.m3u8",
+                3: "https://s30.hdvbua.pro/media3/hls/serials/krapopolis.s01e03.ua.dub/hls/index.m3u8",
+                4: "https://s30.hdvbua.pro/media3/hls/serials/krapopolis.s01e04.ua.dub/hls/index.m3u8",
+                5: "https://s30.hdvbua.pro/media3/hls/serials/krapopolis.s01e05.ua.dub/hls/index.m3u8",
+                6: "https://s30.hdvbua.pro/media3/hls/serials/krapopolis.s01e06.ua.dub/hls/index.m3u8",
+                7: "https://s30.hdvbua.pro/media3/hls/serials/krapopolis.s01e07.ua.dub/hls/index.m3u8",
+                8: "https://s30.hdvbua.pro/media3/hls/serials/krapopolis.s01e08.ua.dub/hls/index.m3u8",
+                9: "https://s30.hdvbua.pro/media3/hls/serials/krapopolis.s01e09.ua.dub/hls/index.m3u8",
+                10: "https://s30.hdvbua.pro/media3/hls/serials/krapopolis.s01e10.ua.dub/hls/index.m3u8"
+            },
+            2: {
+                1: "https://s30.hdvbua.pro/media3/hls/serials/krapopolis.s02e01.ua.dub/hls/index.m3u8",
+                2: "https://s30.hdvbua.pro/media3/hls/serials/krapopolis.s02e02.ua.dub/hls/index.m3u8"
+            }
+        };
+
+        function getEpisodesCount(seasonNum) {
+            switch(seasonNum) {
+                case 1: return 10;
+                case 2: return 8;
+                default: return 10;
+            }
+        }
+
+        function selectSeason(seasonNum) {
+            currentSeason = seasonNum;
+            
+            for (let i = 1; i <= 2; i++) {
+                const btn = document.getElementById(`seasonBtn${i}`);
+                if (btn) {
+                    if (i === seasonNum) {
+                        btn.className = "px-4 py-2 bg-amber-500 text-black font-bold rounded-xl text-sm transition shadow-lg shadow-amber-500/20";
+                    } else {
+                        btn.className = "px-4 py-2 bg-darkBg border border-gray-700 text-white font-bold rounded-xl text-sm transition hover:border-amber-400";
+                    }
+                }
+            }
+
+            document.getElementById('currentSeasonLabel').innerText = `Сезон ${seasonNum}`;
+            generateEpisodes(seasonNum);
+        }
+
+        function generateEpisodes(seasonNum) {
+            const container = document.getElementById('episodesContainer');
+            container.innerHTML = '';
+            
+            const episodesCount = getEpisodesCount(seasonNum);
+
+            for (let ep = 1; ep <= episodesCount; ep++) {
+                const btn = document.createElement('button');
+                btn.innerText = `Серія ${ep}`;
+                btn.id = `epBtn${ep}`;
+                btn.className = (ep === currentEpisode && seasonNum === currentSeason)
+                    ? "px-3 py-1.5 bg-neonPink text-white font-bold rounded-lg text-xs transition shadow-md shadow-neonPink/30"
+                    : "px-3 py-1.5 bg-darkBg border border-gray-700 text-white font-bold rounded-lg text-xs transition hover:border-neonPink";
+                
+                btn.onclick = () => selectEpisode(seasonNum, ep);
+                container.appendChild(btn);
+            }
+
+            selectEpisode(seasonNum, 1);
+        }
+
+        function selectEpisode(seasonNum, episodeNum) {
+            currentSeason = seasonNum;
+            currentEpisode = episodeNum;
+
+            const episodesCount = getEpisodesCount(seasonNum);
+            for (let i = 1; i <= episodesCount; i++) {
+                const btn = document.getElementById(`epBtn${i}`);
+                if (btn) {
+                    if (i === episodeNum) {
+                        btn.className = "px-3 py-1.5 bg-neonPink text-white font-bold rounded-lg text-xs transition shadow-md shadow-neonPink/30";
+                    } else {
+                        btn.className = "px-3 py-1.5 bg-darkBg border border-gray-700 text-white font-bold rounded-lg text-xs transition hover:border-neonPink";
+                    }
+                }
+            }
+
+            const player = document.getElementById('videoPlayer');
+            const source = document.getElementById('videoSource');
+            
+            if (videoDatabase[seasonNum] && videoDatabase[seasonNum][episodeNum]) {
+                source.src = videoDatabase[seasonNum][episodeNum];
+            } else {
+                source.src = "https://cdn77.aj2204.online/files2204/templates/149/134/blank.mp4?cs=0158bde3b1ed466af29359bc3dbf5e34"; 
+            }
+            
+            player.load();
+        }
+
+        window.onload = () => {
+            selectSeason(1);
+        };
+    </script>
+</body>
+</html>
