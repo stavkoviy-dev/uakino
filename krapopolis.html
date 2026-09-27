@@ -79,6 +79,7 @@
                     <div class="flex gap-2 flex-wrap" id="seasonsContainer">
                         <button onclick="selectSeason(1)" id="seasonBtn1" class="px-4 py-2 bg-amber-500 text-black font-bold rounded-xl text-sm transition">Сезон 1</button>
                         <button onclick="selectSeason(2)" id="seasonBtn2" class="px-4 py-2 bg-darkBg border border-gray-700 text-white font-bold rounded-xl text-sm transition hover:border-amber-400">Сезон 2</button>
+                        <button onclick="selectSeason(3)" id="seasonBtn3" class="px-4 py-2 bg-darkBg border border-gray-700 text-white font-bold rounded-xl text-sm transition hover:border-amber-400">Сезон 3</button>
                     </div>
                 </div>
 
@@ -109,7 +110,7 @@
         let currentSeason = 1;
         let currentEpisode = 1;
 
-        // База посилань для «Крапополіса» (Krapopolis)
+        // База посилань для «Крапополіса» (Krapopolis) — 3 сезони
         const videoDatabase = {
             1: {
                 1: "https://s30.hdvbua.pro/media3/hls/serials/krapopolis.s01e01.ua.dub/hls/index.m3u8",
@@ -125,14 +126,40 @@
             },
             2: {
                 1: "https://s30.hdvbua.pro/media3/hls/serials/krapopolis.s02e01.ua.dub/hls/index.m3u8",
-                2: "https://s30.hdvbua.pro/media3/hls/serials/krapopolis.s02e02.ua.dub/hls/index.m3u8"
+                2: "https://s30.hdvbua.pro/media3/hls/serials/krapopolis.s02e02.ua.dub/hls/index.m3u8",
+                3: "https://s30.hdvbua.pro/media3/hls/serials/krapopolis.s02e03.ua.dub/hls/index.m3u8",
+                4: "https://s30.hdvbua.pro/media3/hls/serials/krapopolis.s02e04.ua.dub/hls/index.m3u8",
+                5: "https://s30.hdvbua.pro/media3/hls/serials/krapopolis.s02e05.ua.dub/hls/index.m3u8",
+                6: "https://s30.hdvbua.pro/media3/hls/serials/krapopolis.s02e06.ua.dub/hls/index.m3u8",
+                7: "https://s30.hdvbua.pro/media3/hls/serials/krapopolis.s02e07.ua.dub/hls/index.m3u8",
+                8: "https://s30.hdvbua.pro/media3/hls/serials/krapopolis.s02e08.ua.dub/hls/index.m3u8",
+                9: "https://s30.hdvbua.pro/media3/hls/serials/krapopolis.s02e09.ua.dub/hls/index.m3u8",
+                10: "https://s30.hdvbua.pro/media3/hls/serials/krapopolis.s02e10.ua.dub/hls/index.m3u8",
+                11: "https://s30.hdvbua.pro/media3/hls/serials/krapopolis.s02e11.ua.dub/hls/index.m3u8",
+                12: "https://s30.hdvbua.pro/media3/hls/serials/krapopolis.s02e12.ua.dub/hls/index.m3u8",
+                13: "https://s30.hdvbua.pro/media3/hls/serials/krapopolis.s02e13.ua.dub/hls/index.m3u8",
+                14: "https://s30.hdvbua.pro/media3/hls/serials/krapopolis.s02e14.ua.dub/hls/index.m3u8",
+                15: "https://s30.hdvbua.pro/media3/hls/serials/krapopolis.s02e15.ua.dub/hls/index.m3u8",
+                16: "https://s30.hdvbua.pro/media3/hls/serials/krapopolis.s02e16.ua.dub/hls/index.m3u8",
+                17: "https://s30.hdvbua.pro/media3/hls/serials/krapopolis.s02e17.ua.dub/hls/index.m3u8",
+                18: "https://s30.hdvbua.pro/media3/hls/serials/krapopolis.s02e18.ua.dub/hls/index.m3u8",
+                19: "https://s30.hdvbua.pro/media3/hls/serials/krapopolis.s02e19.ua.dub/hls/index.m3u8",
+                20: "https://s30.hdvbua.pro/media3/hls/serials/krapopolis.s02e20.ua.dub/hls/index.m3u8",
+                21: "https://s30.hdvbua.pro/media3/hls/serials/krapopolis.s02e21.ua.dub/hls/index.m3u8",
+                22: "https://s30.hdvbua.pro/media3/hls/serials/krapopolis.s02e22.ua.dub/hls/index.m3u8"
+            },
+            3: {
+                1: "https://s30.hdvbua.pro/media3/hls/serials/krapopolis.s03e01.ua.dub/hls/index.m3u8",
+                2: "https://s30.hdvbua.pro/media3/hls/serials/krapopolis.s03e02.ua.dub/hls/index.m3u8",
+                3: "https://s30.hdvbua.pro/media3/hls/serials/krapopolis.s03e03.ua.dub/hls/index.m3u8"
             }
         };
 
         function getEpisodesCount(seasonNum) {
             switch(seasonNum) {
                 case 1: return 10;
-                case 2: return 8;
+                case 2: return 22; // Сезон 2 має 22 серії
+                case 3: return 3;  // Сезон 3 має 3 серії
                 default: return 10;
             }
         }
@@ -140,7 +167,7 @@
         function selectSeason(seasonNum) {
             currentSeason = seasonNum;
             
-            for (let i = 1; i <= 2; i++) {
+            for (let i = 1; i <= 3; i++) {
                 const btn = document.getElementById(`seasonBtn${i}`);
                 if (btn) {
                     if (i === seasonNum) {
