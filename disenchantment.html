@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="uk" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Розчарування дивитися онлайн українською — MultFan UA</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        darkBg: '#0b0f19',
+                        cardBg: '#131b2e',
+                        neonGreen: '#00ff66',
+                        neonPink: '#ff007f',
+                        neonYellow: '#ffcc00',
+                        neonPurple: '#a855f7',
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Підключення іконок FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Підключення бібліотеки HLS.js для відтворення .m3u8 потоків -->
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@800;900&display=swap');
+        .font-impact { font-family: 'Montserrat', sans-serif; }
+
+        body {
+            background-color: #0f1117;
+            background-image: linear-gradient(to bottom, rgba(15, 17, 23, 0.85), rgba(15, 17, 23, 0.95)), 
+                              url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQnVyFjQQ1OWf1WjfvnevC0k-WM5i-X7RI_uBlj_rfg9SYWKiypHcWHxyQ&s=10');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+    </style>
+</head>
+<body class="bg-darkBg text-gray-100 min-h-screen flex flex-col font-sans">
+
+    <!-- Шапка -->
+    <header class="bg-cardBg/90 backdrop-blur border-b border-gray-800 sticky top-0 z-50 shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
+            <a href="index.html" class="text-xl font-impact tracking-wider text-white flex items-center gap-2 hover:text-purple-400 transition">
+                <i class="fa-solid fa-arrow-left text-purple-400"></i> На головну
+            </a>
+            <span class="text-neonPink font-impact text-lg">MultFan UA</span>
+        </div>
+    </header>
+
+    <!-- Основний вміст сторінки серіалу -->
+    <main class="max-w-5xl mx-auto px-4 py-8 flex-1 w-full">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            
+            <!-- Постер та інформація -->
+            <div class="space-y-4">
+                <img src="https://eneyida.tv/uploads/posts/2023-09/disenchantment-2018-s05.jpg" alt="Розчарування" class="w-full rounded-2xl shadow-2xl border border-gray-800 object-cover">
+                <div class="bg-cardBg/90 backdrop-blur p-4 rounded-2xl border border-gray-800 space-y-2 text-sm shadow-xl">
+                    <p><span class="text-gray-400">Рейтинг:</span> <strong class="text-neonYellow">8.1 ⭐</strong></p>
+                    <p><span class="text-gray-400">Роки:</span> <strong>2018 - 2023</strong></p>
+                    <p><span class="text-gray-400">Жанр:</span> <strong>Анімація, Пригоди, Комедія, Фентезі</strong></p>
+                </div>
+            </div>
+
+            <!-- Плеєр, вибір сезонів та серій -->
+            <div class="md:col-span-2 space-y-6">
+                <div>
+                    <h1 class="text-3xl font-impact font-black text-white drop-shadow-md">Розчарування (Disenchantment)</h1>
+                    <p class="text-gray-300 text-sm mt-2 leading-relaxed">
+                        Пориньте у середньовічне королівство Дримланд разом із бунтівною принцесою-алкоголічкою Бін, її особистим демоном Елфо та наївним ельфом Елфо (або навпаки — демоном Люці та ельфом Елфо). На них чекають неймовірні пригоди, таємниці та чимало кумедних халеп.
+                    </p>
+                </div>
+
+                <!-- Вибір сезону (Кнопки зверху) -->
+                <div class="bg-cardBg/90 backdrop-blur p-4 rounded-2xl border border-gray-800 shadow-xl">
+                    <h3 class="text-sm font-bold text-gray-300 mb-3"><i class="fa-solid fa-layer-group text-purple-400"></i> Оберіть частину / сезон:</h3>
+                    <div class="flex gap-2 flex-wrap" id="seasonsContainer">
+                        <button onclick="selectSeason(1)" id="seasonBtn1" class="px-4 py-2 bg-purple-600 text-white font-bold rounded-xl text-sm transition">Частина 1</button>
+                        <button onclick="selectSeason(2)" id="seasonBtn2" class="px-4 py-2 bg-darkBg border border-gray-700 text-white font-bold rounded-xl text-sm transition hover:border-purple-400">Частина 2</button>
+                        <button onclick="selectSeason(3)" id="seasonBtn3" class="px-4 py-2 bg-darkBg border border-gray-700 text-white font-bold rounded-xl text-sm transition hover:border-purple-400">Частина 3</button>
+                        <button onclick="selectSeason(4)" id="seasonBtn4" class="px-4 py-2 bg-darkBg border border-gray-700 text-white font-bold rounded-xl text-sm transition hover:border-purple-400">Частина 4</button>
+                        <button onclick="selectSeason(5)" id="seasonBtn5" class="px-4 py-2 bg-darkBg border border-gray-700 text-white font-bold rounded-xl text-sm transition hover:border-purple-400">Частина 5</button>
+                    </div>
+                </div>
+
+                <!-- Відео плеєр -->
+                <div class="relative w-full aspect-video bg-black rounded-2xl overflow-hidden border border-gray-800 shadow-2xl">
+                    <video id="videoPlayer" class="w-full h-full" controls playsinline></video>
+                </div>
+
+                <!-- Вибір серії -->
+                <div class="bg-cardBg/90 backdrop-blur p-4 rounded-2xl border border-gray-800 shadow-xl">
+                    <h3 class="text-sm font-bold text-gray-300 mb-3"><i class="fa-solid fa-play text-neonPink"></i> Оберіть серію (<span id="currentSeasonLabel">Частина 1</span>):</h3>
+                    <div class="flex gap-2 flex-wrap" id="episodesContainer">
+                        <!-- Кнопки серій генеруються через скрипт -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-cardBg/90 backdrop-blur border-t border-gray-800 text-center py-6 text-gray-400 text-sm mt-12 shadow-inner">
+        <p>MultFan UA — Тобі буде весело! 👽🔥</p>
+    </footer>
+
+    <script>
+        let currentSeason = 1;
+        let currentEpisode = 1;
+        let hls = null; // Екземпляр HLS
+
+        // База даних прямих посилань на відео (5 сезонів по 10 серій)
+        // Вставляйте ваші прямі посилання у лапки "" замість порожніх значень
+        const videoDatabase = {
+            1: {
+                1: "",
+                2: "",
+                3: "",
+                4: "",
+                5: "",
+                6: "",
+                7: "",
+                8: "",
+                9: "",
+                10: ""
+            },
+            2: {
+                1: "",
+                2: "",
+                3: "",
+                4: "",
+                5: "",
+                6: "",
+                7: "",
+                8: "",
+                9: "",
+                10: ""
+            },
+            3: {
+                1: "",
+                2: "",
+                3: "",
+                4: "",
+                5: "",
+                6: "",
+                7: "",
+                8: "",
+                9: "",
+                10: ""
+            },
+            4: {
+                1: "",
+                2: "",
+                3: "",
+                4: "",
+                5: "",
+                6: "",
+                7: "",
+                8: "",
+                9: "",
+                10: ""
+            },
+            5: {
+                1: "",
+                2: "",
+                3: "",
+                4: "",
+                5: "",
+                6: "",
+                7: "",
+                8: "",
+                9: "",
+                10: ""
+            }
+        };
+
+        function getEpisodesCount(seasonNum) {
+            return 10; // У всіх 5 частинах "Розчарування" рівно по 10 серій
+        }
+
+        function selectSeason(seasonNum) {
+            currentSeason = seasonNum;
+            
+            for (let i = 1; i <= 5; i++) {
+                const btn = document.getElementById(`seasonBtn${i}`);
+                if (btn) {
+                    if (i === seasonNum) {
+                        btn.className = "px-4 py-2 bg-purple-600 text-white font-bold rounded-xl text-sm transition shadow-lg shadow-purple-600/30";
+                    } else {
+                        btn.className = "px-4 py-2 bg-darkBg border border-gray-700 text-white font-bold rounded-xl text-sm transition hover:border-purple-400";
+                    }
+                }
+            }
+
+            document.getElementById('currentSeasonLabel').innerText = `Частина ${seasonNum}`;
+            generateEpisodes(seasonNum);
+        }
+
+        function generateEpisodes(seasonNum) {
+            const container = document.getElementById('episodesContainer');
+            container.innerHTML = '';
+            
+            const episodesCount = getEpisodesCount(seasonNum);
+
+            for (let ep = 1; ep <= episodesCount; ep++) {
+                const btn = document.createElement('button');
+                btn.innerText = `Серія ${ep}`;
+                btn.id = `epBtn${ep}`;
+                btn.className = (ep === currentEpisode && seasonNum === currentSeason)
+                    ? "px-3 py-1.5 bg-neonPink text-white font-bold rounded-lg text-xs transition shadow-md shadow-neonPink/30"
+                    : "px-3 py-1.5 bg-darkBg border border-gray-700 text-white font-bold rounded-lg text-xs transition hover:border-neonPink";
+                
+                btn.onclick = () => selectEpisode(seasonNum, ep);
+                container.appendChild(btn);
+            }
+
+            selectEpisode(seasonNum, 1);
+        }
+
+        function selectEpisode(seasonNum, episodeNum) {
+            currentSeason = seasonNum;
+            currentEpisode = episodeNum;
+
+            const episodesCount = getEpisodesCount(seasonNum);
+            for (let i = 1; i <= episodesCount; i++) {
+                const btn = document.getElementById(`epBtn${i}`);
+                if (btn) {
+                    if (i === episodeNum) {
+                        btn.className = "px-3 py-1.5 bg-neonPink text-white font-bold rounded-lg text-xs transition shadow-md shadow-neonPink/30";
+                    } else {
+                        btn.className = "px-3 py-1.5 bg-darkBg border border-gray-700 text-white font-bold rounded-lg text-xs transition hover:border-neonPink";
+                    }
+                }
+            }
+
+            const video = document.getElementById('videoPlayer');
+            let videoUrl = (videoDatabase[seasonNum] && videoDatabase[seasonNum][episodeNum]) 
+                ? videoDatabase[seasonNum][episodeNum] 
+                : "";
+
+            // Якщо посилання порожнє, очищуємо плеєр
+            if (!videoUrl) {
+                if (hls) {
+                    hls.destroy();
+                    hls = null;
+                }
+                video.src = "";
+                return;
+            }
+
+            // Логіка відтворення HLS або MP4
+            if (Hls.isSupported() && videoUrl.includes('.m3u8')) {
+                if (hls) {
+                    hls.destroy();
+                }
+                hls = new Hls();
+                hls.loadSource(videoUrl);
+                hls.attachMedia(video);
+                hls.on(Hls.Events.MANIFEST_PARSED, function() {
+                    video.play().catch(e => console.log("Автозапуск заблоковано:", e));
+                });
+            } else if (video.canPlayType('application/vnd.apple.mpegurl') && videoUrl.includes('.m3u8')) {
+                video.src = videoUrl;
+                video.addEventListener('loadedmetadata', function() {
+                    video.play().catch(e => console.log(e));
+                });
+            } else {
+                if (hls) {
+                    hls.destroy();
+                    hls = null;
+                }
+                video.src = videoUrl;
+                video.load();
+                video.play().catch(e => console.log(e));
+            }
+        }
+
+        window.onload = () => {
+            selectSeason(1);
+        };
+    </script>
+</body>
+</html>
