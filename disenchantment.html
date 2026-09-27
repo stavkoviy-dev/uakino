@@ -77,13 +77,13 @@
 
                 <!-- Вибір сезону (Кнопки зверху) -->
                 <div class="bg-cardBg/90 backdrop-blur p-4 rounded-2xl border border-gray-800 shadow-xl">
-                    <h3 class="text-sm font-bold text-gray-300 mb-3"><i class="fa-solid fa-layer-group text-purple-400"></i> Оберіть частину / сезон:</h3>
+                    <h3 class="text-sm font-bold text-gray-300 mb-3"><i class="fa-solid fa-layer-group text-purple-400"></i> Оберіть сезон:</h3>
                     <div class="flex gap-2 flex-wrap" id="seasonsContainer">
-                        <button onclick="selectSeason(1)" id="seasonBtn1" class="px-4 py-2 bg-purple-600 text-white font-bold rounded-xl text-sm transition">Частина 1</button>
-                        <button onclick="selectSeason(2)" id="seasonBtn2" class="px-4 py-2 bg-darkBg border border-gray-700 text-white font-bold rounded-xl text-sm transition hover:border-purple-400">Частина 2</button>
-                        <button onclick="selectSeason(3)" id="seasonBtn3" class="px-4 py-2 bg-darkBg border border-gray-700 text-white font-bold rounded-xl text-sm transition hover:border-purple-400">Частина 3</button>
-                        <button onclick="selectSeason(4)" id="seasonBtn4" class="px-4 py-2 bg-darkBg border border-gray-700 text-white font-bold rounded-xl text-sm transition hover:border-purple-400">Частина 4</button>
-                        <button onclick="selectSeason(5)" id="seasonBtn5" class="px-4 py-2 bg-darkBg border border-gray-700 text-white font-bold rounded-xl text-sm transition hover:border-purple-400">Частина 5</button>
+                        <button onclick="selectSeason(1)" id="seasonBtn1" class="px-4 py-2 bg-purple-600 text-white font-bold rounded-xl text-sm transition">Сезон 1</button>
+                        <button onclick="selectSeason(2)" id="seasonBtn2" class="px-4 py-2 bg-darkBg border border-gray-700 text-white font-bold rounded-xl text-sm transition hover:border-purple-400">Сезон 2</button>
+                        <button onclick="selectSeason(3)" id="seasonBtn3" class="px-4 py-2 bg-darkBg border border-gray-700 text-white font-bold rounded-xl text-sm transition hover:border-purple-400">Сезон 3</button>
+                        <button onclick="selectSeason(4)" id="seasonBtn4" class="px-4 py-2 bg-darkBg border border-gray-700 text-white font-bold rounded-xl text-sm transition hover:border-purple-400">Сезон 4</button>
+                        <button onclick="selectSeason(5)" id="seasonBtn5" class="px-4 py-2 bg-darkBg border border-gray-700 text-white font-bold rounded-xl text-sm transition hover:border-purple-400">Сезон 5</button>
                     </div>
                 </div>
 
@@ -94,7 +94,7 @@
 
                 <!-- Вибір серії -->
                 <div class="bg-cardBg/90 backdrop-blur p-4 rounded-2xl border border-gray-800 shadow-xl">
-                    <h3 class="text-sm font-bold text-gray-300 mb-3"><i class="fa-solid fa-play text-neonPink"></i> Оберіть серію (<span id="currentSeasonLabel">Частина 1</span>):</h3>
+                    <h3 class="text-sm font-bold text-gray-300 mb-3"><i class="fa-solid fa-play text-neonPink"></i> Оберіть серію (<span id="currentSeasonLabel">Сезон 1</span>):</h3>
                     <div class="flex gap-2 flex-wrap" id="episodesContainer">
                         <!-- Кнопки серій генеруються через скрипт -->
                     </div>
@@ -178,7 +178,7 @@
         };
 
         function getEpisodesCount(seasonNum) {
-            return 10; // У всіх 5 частинах "Розчарування" рівно по 10 серій
+            return 10; // У всіх 5 сезонах "Розчарування" рівно по 10 серій
         }
 
         function selectSeason(seasonNum) {
@@ -195,7 +195,7 @@
                 }
             }
 
-            document.getElementById('currentSeasonLabel').innerText = `Частина ${seasonNum}`;
+            document.getElementById('currentSeasonLabel').innerText = `Сезон ${seasonNum}`;
             generateEpisodes(seasonNum);
         }
 
