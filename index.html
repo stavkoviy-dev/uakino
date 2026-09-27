@@ -39,7 +39,12 @@
         }
     </style>
 </head>
-<body class="bg-darkBg text-gray-100 min-h-screen flex flex-col font-sans selection:bg-neonPink selection:text-white">
+body {
+            background: linear-gradient(rgba(11, 5, 29, 0.4), rgba(11, 5, 29, 0.6)), 
+                        url('bg.jpg') no-repeat center center fixed;
+            background-size: cover;
+            image-rendering: -webkit-optimize-contrast; /* Покращує різкість у деяких браузерах */
+        }
 
     <!-- Шапка сайту з божевільним логотипом -->
     <header class="bg-cardBg/80 backdrop-blur-md border-b border-purple-900/40 sticky top-0 z-50 shadow-2xl">
