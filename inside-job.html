@@ -78,7 +78,6 @@
                     <h3 class="text-sm font-bold text-gray-300 mb-3"><i class="fa-solid fa-layer-group text-neonCyan"></i> Оберіть сезон:</h3>
                     <div class="flex gap-2 flex-wrap" id="seasonsContainer">
                         <button onclick="selectSeason(1)" id="seasonBtn1" class="px-4 py-2 bg-neonCyan text-black font-bold rounded-xl text-sm transition">Сезон 1</button>
-                        <button onclick="selectSeason(2)" id="seasonBtn2" class="px-4 py-2 bg-darkBg border border-gray-700 text-white font-bold rounded-xl text-sm transition hover:border-neonCyan">Сезон 2</button>
                     </div>
                 </div>
 
@@ -109,7 +108,7 @@
         let currentSeason = 1;
         let currentEpisode = 1;
 
-        // База посилань для «Корпорації змов» (Inside Job)
+        // База посилань для «Корпорації змов» (Inside Job) — тільки 1 сезон
         const videoDatabase = {
             1: {
                 1: "https://s30.hdvbua.pro/media1/hls/serials/inside.job.s01e01.dniprofilm.mvo_77460/hls/index.m3u8",
@@ -122,39 +121,19 @@
                 8: "https://s30.hdvbua.pro/media1/hls/serials/inside.job.s01e08.dniprofilm.mvo_77467/hls/index.m3u8",
                 9: "https://s30.hdvbua.pro/media3/hls/serials/inside.job.s01e09.dniprofilm.mvo_77468/hls/index.m3u8",
                 10: "https://s30.hdvbua.pro/media1/hls/serials/inside.job.s01e10.dniprofilm.mvo_77469/hls/index.m3u8"
-            },
-            2: {
-                1: "https://jk19ocmjeoyql3tj.ashdi.vip/content/stream/serials/korporaczya_zmov/1_serya_gotovo_2_98308/hls/480/segment13.ts",
-                2: "https://ashdi.vip/video27/1/serials/korporaczya_zmov/2_serya_gotova_98309/hls/480/BKqAlHWNlPtdmAjhBI4g/index.m3u8",
-                3: "https://ashdi.vip/video27/1/serials/korporaczya_zmov/kz_3_serya_gotova_98310/hls/BKqAlHWNlPtdmAjhBI4g/index.m3u8",
-                4: "https://ashdi.vip/video27/1/serials/korporaczya_zmov/kz_4_gotova_98311/hls/BKqAlHWNlPtdmAjhBI4g/index.m3u8",
-                5: "https://ashdi.vip/video27/1/serials/korporaczya_zmov/kz_5_gotovo_98312/hls/BKqAlHWNlPtdmAjhBI4g/index.m3u8",
-                6: "https://ashdi.vip/video27/1/serials/korporaczya_zmov/kz_6_gotovo_98313/hls/BKqAlHWNlPtdmAjhBI4g/index.m3u8",
-                7: "https://ashdi.vip/video27/1/new/7_serya_98323/hls/BKqAlHWNlPtdmAjhBI4g/index.m3u8",
-                8: "https://ashdi.vip/video27/1/serials/8_serya_98324/hls/BKqAlHWNlPtdmAjhBI4g/index.m3u8"
             }
         };
 
         function getEpisodesCount(seasonNum) {
-            switch(seasonNum) {
-                case 1: return 10;
-                case 2: return 8;
-                default: return 10;
-            }
+            return 10;
         }
 
         function selectSeason(seasonNum) {
             currentSeason = seasonNum;
             
-            for (let i = 1; i <= 2; i++) {
-                const btn = document.getElementById(`seasonBtn${i}`);
-                if (btn) {
-                    if (i === seasonNum) {
-                        btn.className = "px-4 py-2 bg-neonCyan text-black font-bold rounded-xl text-sm transition shadow-lg shadow-neonCyan/20";
-                    } else {
-                        btn.className = "px-4 py-2 bg-darkBg border border-gray-700 text-white font-bold rounded-xl text-sm transition hover:border-neonCyan";
-                    }
-                }
+            const btn = document.getElementById(`seasonBtn1`);
+            if (btn) {
+                btn.className = "px-4 py-2 bg-neonCyan text-black font-bold rounded-xl text-sm transition shadow-lg shadow-neonCyan/20";
             }
 
             document.getElementById('currentSeasonLabel').innerText = `Сезон ${seasonNum}`;
