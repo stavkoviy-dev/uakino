@@ -24,6 +24,8 @@
     </script>
     <!-- Підключення іконок FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Підключення бібліотеки HLS.js для відтворення .m3u8 потоків -->
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@800;900&display=swap');
         .font-impact { font-family: 'Montserrat', sans-serif; }
@@ -85,10 +87,7 @@
 
                 <!-- Відео плеєр -->
                 <div class="relative w-full aspect-video bg-black rounded-2xl overflow-hidden border border-gray-800 shadow-2xl">
-                    <video id="videoPlayer" class="w-full h-full" controls>
-                        <source id="videoSource" src="" type="video/mp4">
-                        Ваш браузер не підтримує відео.
-                    </video>
+                    <video id="videoPlayer" class="w-full h-full" controls playsinline></video>
                 </div>
 
                 <!-- Вибір серії -->
@@ -109,70 +108,71 @@
     <script>
         let currentSeason = 1;
         let currentEpisode = 1;
+        let hls = null; // Змінна для збереження екземпляра HLS
 
         // База посилань для «Крапополіса» (Krapopolis) — 3 сезони
         const videoDatabase = {
             1: {
-                1: "https://ashdi.vip/video27/1/new/krapopolis_s01e01_by_didko_114882/hls/480/BKqAlHWNlPtdmAjhBI4g/index.m3u8",
+                1: "",
                 2: "",
                 3: "",
                 4: "",
                 5: "",
                 6: "",
                 7: "",
-                8: "",
-                9: "",
-                10: "",
-                11: "",
-                12: "",
-                13: "",
-                14: "",
-                15: "",
-                16: "",
-                17: "",
-                18: "",
-                19: "",
-                20: "",
-                21: "",
-                22: "",
-                23: ""
+                8: "https://s30.hdvbua.pro/media3/hls/serials/krapopolis.s01e08.ua.dub/hls/index.m3u8",
+                9: "https://s30.hdvbua.pro/media3/hls/serials/krapopolis.s01e09.ua.dub/hls/index.m3u8",
+                10: "https://s30.hdvbua.pro/media3/hls/serials/krapopolis.s01e10.ua.dub/hls/index.m3u8",
+                11: "https://s30.hdvbua.pro/media3/hls/serials/krapopolis.s01e11.ua.dub/hls/index.m3u8",
+                12: "https://s30.hdvbua.pro/media3/hls/serials/krapopolis.s01e12.ua.dub/hls/index.m3u8",
+                13: "https://s30.hdvbua.pro/media3/hls/serials/krapopolis.s01e13.ua.dub/hls/index.m3u8",
+                14: "https://s30.hdvbua.pro/media3/hls/serials/krapopolis.s01e14.ua.dub/hls/index.m3u8",
+                15: "https://s30.hdvbua.pro/media3/hls/serials/krapopolis.s01e15.ua.dub/hls/index.m3u8",
+                16: "https://s30.hdvbua.pro/media3/hls/serials/krapopolis.s01e16.ua.dub/hls/index.m3u8",
+                17: "https://s30.hdvbua.pro/media3/hls/serials/krapopolis.s01e17.ua.dub/hls/index.m3u8",
+                18: "https://s30.hdvbua.pro/media3/hls/serials/krapopolis.s01e18.ua.dub/hls/index.m3u8",
+                19: "https://s30.hdvbua.pro/media3/hls/serials/krapopolis.s01e19.ua.dub/hls/index.m3u8",
+                20: "https://s30.hdvbua.pro/media3/hls/serials/krapopolis.s01e20.ua.dub/hls/index.m3u8",
+                21: "https://s30.hdvbua.pro/media3/hls/serials/krapopolis.s01e21.ua.dub/hls/index.m3u8",
+                22: "https://s30.hdvbua.pro/media3/hls/serials/krapopolis.s01e22.ua.dub/hls/index.m3u8",
+                23: "https://s30.hdvbua.pro/media3/hls/serials/krapopolis.s01e23.ua.dub/hls/index.m3u8"
             },
             2: {
-                1: "",
-                2: "",
-                3: "",
-                4: "",
-                5: "",
-                6: "",
-                7: "",
-                8: "",
-                9: "",
-                10: "",
-                11: "",
-                12: "",
-                13: "",
-                14: "",
-                15: "",
-                16: "",
-                17: "",
-                18: "",
-                19: "",
-                20: "",
-                21: "",
-                22: ""
+                1: "https://s30.hdvbua.pro/media3/hls/serials/krapopolis.s02e01.ua.dub/hls/index.m3u8",
+                2: "https://s30.hdvbua.pro/media3/hls/serials/krapopolis.s02e02.ua.dub/hls/index.m3u8",
+                3: "https://s30.hdvbua.pro/media3/hls/serials/krapopolis.s02e03.ua.dub/hls/index.m3u8",
+                4: "https://s30.hdvbua.pro/media3/hls/serials/krapopolis.s02e04.ua.dub/hls/index.m3u8",
+                5: "https://s30.hdvbua.pro/media3/hls/serials/krapopolis.s02e05.ua.dub/hls/index.m3u8",
+                6: "https://s30.hdvbua.pro/media3/hls/serials/krapopolis.s02e06.ua.dub/hls/index.m3u8",
+                7: "https://s30.hdvbua.pro/media3/hls/serials/krapopolis.s02e07.ua.dub/hls/index.m3u8",
+                8: "https://s30.hdvbua.pro/media3/hls/serials/krapopolis.s02e08.ua.dub/hls/index.m3u8",
+                9: "https://s30.hdvbua.pro/media3/hls/serials/krapopolis.s02e09.ua.dub/hls/index.m3u8",
+                10: "https://s30.hdvbua.pro/media3/hls/serials/krapopolis.s02e10.ua.dub/hls/index.m3u8",
+                11: "https://s30.hdvbua.pro/media3/hls/serials/krapopolis.s02e11.ua.dub/hls/index.m3u8",
+                12: "https://s30.hdvbua.pro/media3/hls/serials/krapopolis.s02e12.ua.dub/hls/index.m3u8",
+                13: "https://s30.hdvbua.pro/media3/hls/serials/krapopolis.s02e13.ua.dub/hls/index.m3u8",
+                14: "https://s30.hdvbua.pro/media3/hls/serials/krapopolis.s02e14.ua.dub/hls/index.m3u8",
+                15: "https://s30.hdvbua.pro/media3/hls/serials/krapopolis.s02e15.ua.dub/hls/index.m3u8",
+                16: "https://s30.hdvbua.pro/media3/hls/serials/krapopolis.s02e16.ua.dub/hls/index.m3u8",
+                17: "https://s30.hdvbua.pro/media3/hls/serials/krapopolis.s02e17.ua.dub/hls/index.m3u8",
+                18: "https://s30.hdvbua.pro/media3/hls/serials/krapopolis.s02e18.ua.dub/hls/index.m3u8",
+                19: "https://s30.hdvbua.pro/media3/hls/serials/krapopolis.s02e19.ua.dub/hls/index.m3u8",
+                20: "https://s30.hdvbua.pro/media3/hls/serials/krapopolis.s02e20.ua.dub/hls/index.m3u8",
+                21: "https://s30.hdvbua.pro/media3/hls/serials/krapopolis.s02e21.ua.dub/hls/index.m3u8",
+                22: "https://s30.hdvbua.pro/media3/hls/serials/krapopolis.s02e22.ua.dub/hls/index.m3u8"
             },
             3: {
-                1: "",
-                2: "",
-                3: ""
+                1: "https://s30.hdvbua.pro/media3/hls/serials/krapopolis.s03e01.ua.dub/hls/index.m3u8",
+                2: "https://s30.hdvbua.pro/media3/hls/serials/krapopolis.s03e02.ua.dub/hls/index.m3u8",
+                3: "https://s30.hdvbua.pro/media3/hls/serials/krapopolis.s03e03.ua.dub/hls/index.m3u8"
             }
         };
 
         function getEpisodesCount(seasonNum) {
             switch(seasonNum) {
-                case 1: return 23; // Сезон 1 тепер має 23 серії
-                case 2: return 22; // Сезон 2 має 22 серії
-                case 3: return 3;  // Сезон 3 має 3 серії
+                case 1: return 23;
+                case 2: return 22;
+                case 3: return 3;
                 default: return 23;
             }
         }
@@ -232,21 +232,45 @@
                 }
             }
 
-            const player = document.getElementById('videoPlayer');
-            const source = document.getElementById('videoSource');
-            
-            if (videoDatabase[seasonNum] && videoDatabase[seasonNum][episodeNum]) {
-                source.src = videoDatabase[seasonNum][episodeNum];
+            const video = document.getElementById('videoPlayer');
+            let videoUrl = (videoDatabase[seasonNum] && videoDatabase[seasonNum][episodeNum]) 
+                ? videoDatabase[seasonNum][episodeNum] 
+                : "https://cdn77.aj2204.online/files2204/templates/149/134/blank.mp4?cs=0158bde3b1ed466af29359bc3dbf5e34";
+
+            // Використовуємо HLS.js для .m3u8 посилань
+            if (Hls.isSupported() && videoUrl.includes('.m3u8')) {
+                if (hls) {
+                    hls.destroy();
+                }
+                hls = new Hls();
+                hls.loadSource(videoUrl);
+                hls.attachMedia(video);
+                hls.on(Hls.Events.MANIFEST_PARSED, function() {
+                    video.play().catch(e => console.log("Автозапуск заблоковано браузером:", e));
+                });
+            } else if (video.canPlayType('application/vnd.apple.mpegurl') && videoUrl.includes('.m3u8')) {
+                // Для Safari, який підтримує HLS «з коробки»
+                video.src = videoUrl;
+                video.addEventListener('loadedmetadata', function() {
+                    video.play().catch(e => console.log(e));
+                });
             } else {
-                source.src = "https://cdn77.aj2204.online/files2204/templates/149/134/blank.mp4?cs=0158bde3b1ed466af29359bc3dbf5e34"; 
+                // Для звичайних mp4 посилань (якщо такі будуть)
+                if (hls) {
+                    hls.destroy();
+                    hls = null;
+                }
+                video.src = videoUrl;
+                video.load();
+                video.play().catch(e => console.log(e));
             }
-            
-            player.load();
         }
 
         window.onload = () => {
             selectSeason(1);
         };
     </script>
+</body>
+</html>
 </body>
 </html>
